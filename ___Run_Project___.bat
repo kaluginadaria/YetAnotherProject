@@ -1,3 +1,3 @@
 cd Binaries
-PendulumEngine.sln
+YetAnotherProject.sln
 cd ..

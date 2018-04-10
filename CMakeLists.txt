@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
+project(YetAnotherProject)
+
 #~~~~~~~~~~~~~~~~~~~~~~~| >> setup project | 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 INCLUDE("Cmake/DefaultSetup.cmake")
@@ -11,7 +13,7 @@ SetupEvniroment()
 DefineVMath()
 	
 #~~~~~~~~~~~~~~~~~~~~~~~| >> init project |
-INIT_PROJECT(Engine)
+INIT_PROJECT(Engine Pendulum)
 
 #~~~~~~~~~~~~~~~~~~~~~~~| >> make test module
 #MAKE_MODULE(PendulumEngine)
