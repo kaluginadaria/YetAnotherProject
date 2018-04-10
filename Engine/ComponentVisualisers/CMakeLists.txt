@@ -1,0 +1,6 @@
+MAKE_MODULE(ComponentVisualisers)
+SET(CATEGORY "Engine")
+SET(MODULES Core Misc Components)
+file(GLOB_RECURSE SOURCES *.cpp)
+file(GLOB_RECURSE HEADERS *.hpp)
+SETUP_MODULE()

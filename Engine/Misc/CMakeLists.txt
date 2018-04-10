@@ -1,0 +1,5 @@
+MAKE_MODULE(Misc)
+SET(CATEGORY "Engine")
+file(GLOB SOURCES *.cpp)
+file(GLOB HEADERS *.hpp)
+SETUP_MODULE()
