@@ -1,12 +1,6 @@
 #include "World.hpp"
-#include "World.hpp"
-
-#include <assert.h>
-
-#include "Threading/ThreadPull.hpp"
-
 #include "Actor.hpp"
-#include "Object.hpp"
+#include "Threading/ThreadPull.hpp"
 
 
 World::World()
@@ -23,9 +17,7 @@ World::World()
 }
 
 World::~World()
-{
-	
-}
+{}
 
 void World::OnSimulationStart()
 {

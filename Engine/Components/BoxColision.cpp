@@ -5,7 +5,7 @@ BoxColision::BoxColision()
 	: extends(1, 1, 1)
 {}
 
-void BoxColision::SetExtends(Vector3f newExtends)
+void BoxColision::SetExtends(FVector newExtends)
 {
 	extends = newExtends;
 }

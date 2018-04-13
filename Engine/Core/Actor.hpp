@@ -22,37 +22,37 @@ public:
 
 public: //~~~~~~~~~~~~~~| Physics -> to root component
 
-	void AddForce (const Vector3f& force, ESpaceType space);
-	void AddTorque(const Vector3f& torue, ESpaceType space);
+	void AddForce (const FVector& force, ESpaceType space);
+	void AddTorque(const FVector& torue, ESpaceType space);
 
 public: //~~~~~~~~~~~~~~| Kinematic -> to root component
 
 		/// transform
 
-	void SetComponentTransform(Transform newTransform);
-	void SetRelativeTransform(Transform newTransform);
-	Transform GetComponentTransform() const;
-	Transform GetRelativeTransform() const;
+	void SetComponentTransform(FTransform newTransform);
+	void SetRelativeTransform (FTransform newTransform);
+	FTransform GetComponentTransform() const;
+	FTransform GetRelativeTransform()  const;
 
 	/// location
 
-	void SetComponentLocation(Vector3f newLocation);
-	void SetRelativeLocation(Vector3f newLocation);
-	Vector3f  GetComponentLocation() const;
-	Vector3f  GetRelativeLocation() const;
+	void SetComponentLocation(FVector newLocation);
+	void SetRelativeLocation (FVector newLocation);
+	FVector GetComponentLocation() const;
+	FVector GetRelativeLocation()  const;
 
 	/// rotation
 
-	void SetComponentRotation(Quatf newRotation);
-	void SetRelativeRotation(Quatf newRotation);
-	Quatf GetComponentRotation() const;
-	Quatf GetRelativeRotation() const;
+	void SetComponentRotation(FQuat newRotation);
+	void SetRelativeRotation (FQuat newRotation);
+	FQuat GetComponentRotation() const;
+	FQuat GetRelativeRotation()  const;
 
 	/// add
 
-	void AddTransform(Transform delta, ESpaceType space = ESpaceType::eWorld);
-	void AddComponentLocation(Vector3f	delta, ESpaceType space = ESpaceType::eWorld);
-	void AddComponentRotation(Quatf     delta, ESpaceType space = ESpaceType::eWorld);
+	void AddTransform        (FTransform delta, ESpaceType space = ESpaceType::eWorld);
+	void AddComponentLocation(FVector    delta, ESpaceType space = ESpaceType::eWorld);
+	void AddComponentRotation(FQuat      delta, ESpaceType space = ESpaceType::eWorld);
 
 public: //~~~~~~~~~~~~~~| chain and modules
 
@@ -60,7 +60,7 @@ public: //~~~~~~~~~~~~~~| chain and modules
 	      ActorComponent* GetRootComponent()       { return rootComponent; }
 	void SetRootComponent(ActorComponent* newRoot);
 
-	      std::vector<ActorModule*>& GetModules()	    { return modules; }
+	      std::vector<ActorModule*>& GetModules()       { return modules; }
 	const std::vector<ActorModule*>& GetModules() const { return modules; }
 
 	// TODO:: GetComponents<T> - over modules and components

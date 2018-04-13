@@ -1,12 +1,9 @@
 #pragma once
 
-#include <assert.h>
-
 #include <array>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
-
 
 #include "Types.hpp"
 #include "Misc.hpp"

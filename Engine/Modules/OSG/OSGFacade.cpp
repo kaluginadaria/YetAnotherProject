@@ -35,18 +35,18 @@ bool Facade::Detach()
 inline void Facade::Update()
 {
 	if (!owner) return;
-	Transform offset = owner->GetRelativeTransform();
-	Vector3f newVec = offset.getOrigin();
+	FTransform offset = owner->GetRelativeTransform();
+	FVector newVec    = offset.Location;
 
-	osg::Vec3 newPos = osg::Vec3(newVec.x, newVec.y, newVec.z);
+	osg::Vec3 newPos = osg::Vec3(newVec.X, newVec.Y, newVec.Z);
 	GetRoot()->setPosition(newPos);
 
-	Quatf newQuat = offset.getRotation();
+	FQuat newQuat = offset.Rotation;
 	osg::Quat newRot = osg::Quat(
-		newQuat.v.x, 
-		newQuat.v.y, 
-		newQuat.v.z, 
-		newQuat.w );
+		newQuat.X, 
+		newQuat.Y, 
+		newQuat.Z, 
+		newQuat.W);
 	GetRoot()->setAttitude(newRot);
 }
 

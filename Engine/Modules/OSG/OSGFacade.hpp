@@ -23,7 +23,6 @@
 class Facade : public IFacade
 {
 public:
-
 	Facade(ActorComponent* owner);
 
 public:
@@ -33,7 +32,6 @@ public:
 	virtual void Update() override;
 
 public:
-
 	osg::ref_ptr<osg::PositionAttitudeTransform> GetRoot();
 
 public:

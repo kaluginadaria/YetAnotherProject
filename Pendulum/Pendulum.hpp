@@ -16,20 +16,20 @@ public:
 		: pid(4, 0, 20)
 	{
 		base = CreateSubComponent<BoxColision>("Base");
-		base->SetExtends({0.6f, 0.6f, 0.6f});
+		base->SetExtends(FVector(0.6f, 0.6f, 0.6f));
 		
 		pendulum = CreateSubComponent<BoxColision>("Pendulum");
-		pendulum->AddComponentLocation({2, 0, 0}, eParent);
-		pendulum->SetExtends({2, 0.2f, 0.2f});
+		pendulum->AddComponentLocation(FVector(2, 0, 0), eParent);
+		pendulum->SetExtends(FVector(2, 0.2f, 0.2f));
 		
 		target = CreateSubComponent<BoxColision>("Target");
-		target->AddComponentLocation({5, 0 , 0}, eParent);
-		target->AddComponentRotation({0 ,90, 0}, eParent);
-		target->SetExtends({0.5f, 0.1f, 0.1f});
+		target->AddComponentLocation(FVector(5, 0 , 0), eParent);
+		target->AddComponentRotation(FQuat(0 ,90, 0), eParent);
+		target->SetExtends(FVector(0.5f, 0.1f, 0.1f));
 
 		cam = CreateSubComponent<CameraComponent>("Camera");
-		cam->AddComponentLocation({-30, 0, 0}, eParent);
-		cam->AddComponentRotation({ 0, 0 ,90}, eParent);
+		cam->AddComponentLocation(FVector(-30, 0, 0), eParent);
+		cam->AddComponentRotation(FQuat( 0, 0 ,90), eParent);
 		cam->SetAutoregister(true);
 	}
 
@@ -43,15 +43,15 @@ public:
 		auto cr = pendulum->GetComponentRotation();
 		auto delta = ~cr * tr;
 
-		const float control = pid.GetValue(delta.v.y, dt);
+		const float control = pid.GetValue(delta.Y, dt);
 		const float inertia = 600;
 		const float M0      = 100;
 
 		const float M  = M0 * control;
-		const float dw = (float)RAD2DEG(M / inertia * dt);
+		const float dw = RAD2DEG(M / inertia * dt);
 		w += dw;
 
-		pendulum->AddComponentRotation({0, w * dt, 0}, eParent);
+		pendulum->AddComponentRotation(FQuat(0, w * dt, 0), eParent);
 	}
 
 	virtual void SetupInput(EventBinder* binder)
@@ -69,7 +69,7 @@ protected:
 		if (value && cam)
 		{
 			float delta = 40 * value * dt;
-			cam->AddComponentRotation({0, 0, delta}, eParent);
+			cam->AddComponentRotation(FQuat(0, 0, delta), eParent);
 		}
 	}
 
@@ -78,7 +78,7 @@ protected:
 		if (value && cam)
 		{
 			float delta = 40 * value * dt;
-			cam->AddComponentRotation({delta, 0, 0}, eParent);
+			cam->AddComponentRotation(FQuat(delta, 0, 0), eParent);
 		}
 	}
 
@@ -87,7 +87,7 @@ protected:
 		if (value && target)
 		{
 			float delta = 40 * value * dt;
-			target->AddComponentRotation({0, delta, 0}, eParent);
+			target->AddComponentRotation(FQuat(0, delta, 0), eParent);
 		}
 	}
 
@@ -106,3 +106,5 @@ protected:
 
 	PID pid;
 };
+
+// convare

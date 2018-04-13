@@ -5,10 +5,6 @@
 #define UNIQUE(TYPE)	std::unique_ptr<TYPE>
 
 
-#define CHECK_BASE(BASE, INSTANCE) static_assert(static_cast<BASE*>(INSTANCE))
-
-
-
 #define GENERATED_BODY(CLASS, SUPER) \
 	public: \
 		virtual std::string __GetClassName() const override \

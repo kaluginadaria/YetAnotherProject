@@ -20,7 +20,7 @@ struct IViewer
 public:
 
 	virtual void Render() = 0;
-	virtual void DrawShape(FShape shape, Transform transform, Vector4f color) = 0;
+	virtual void DrawShape(FShape shape, FTransform transform, FColor color) = 0;
 
 	World*			 GetWorld();
 	CameraComponent* GetActiveCamera();

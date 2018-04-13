@@ -41,23 +41,20 @@ bool CameraManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 	if (auto* camera = manager.GetCurrentCamera())
 	{
 		auto worldTransform = camera->GetComponentTransform();
-		auto rotation = worldTransform.getRotation();
-		auto location = worldTransform.getOrigin();
-
-		auto v_rm = rotation.rotMatrix();
+		auto rotation = worldTransform.Rotation;
+		auto location = worldTransform.Location;
 
 		osg::Matrixd mr, mt;
-
 		mr.makeRotate(osg::Quat(
-			rotation.v.x,
-			rotation.v.y,
-			rotation.v.z,
-			rotation.w
+			rotation.X,
+			rotation.Y,
+			rotation.Z,
+			rotation.W
 			));
 		mt.makeTranslate(
-			location.x,
-			location.y,
-			location.z
+			location.X,
+			location.Y,
+			location.Z
 			);
 		lastMatrix = mr * mt;
 	}

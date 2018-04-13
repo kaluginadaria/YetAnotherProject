@@ -16,7 +16,7 @@ public:
 		assert(viewer);
 	}
 
-	void DrawShape(FShape shape, Transform transform, Vector4f color)
+	void DrawShape(FShape shape, FTransform transform, FColor color)
 	{
 		if (viewer)
 		{

@@ -80,7 +80,7 @@ void Viewer::Render()
 	viewer.frame();
 }
 
-void Viewer::DrawShape(FShape shape, Transform transform, Vector4f color)
+void Viewer::DrawShape(FShape shape, FTransform transform, FColor color)
 {
 	using LBase  = osg::ref_ptr<osg::PositionAttitudeTransform>;
 	using LShape = osg::ref_ptr<osg::ShapeDrawable>;
@@ -89,20 +89,20 @@ void Viewer::DrawShape(FShape shape, Transform transform, Vector4f color)
 		};
 
 	osg::Vec3 origin(
-		transform.origin.x,
-		transform.origin.y,
-		transform.origin.z
+		transform.Location.X,
+		transform.Location.Y,
+		transform.Location.Z
 		);
 	osg::Quat rot(
-		transform.rotation.v.x,
-		transform.rotation.v.y,
-		transform.rotation.v.z,
-		transform.rotation.w
+		transform.Rotation.X,
+		transform.Rotation.Y,
+		transform.Rotation.Z,
+		transform.Rotation.W
 		);
 	osg::Vec3 len(
-		shape.extends.x * 2,
-		shape.extends.y * 2,
-		shape.extends.z * 2
+		shape.extends.X * 2,
+		shape.extends.Y * 2,
+		shape.extends.Z * 2
 		);
 
 	LShape mesh;
@@ -118,10 +118,10 @@ void Viewer::DrawShape(FShape shape, Transform transform, Vector4f color)
 		base->setAttitude(rot);
 		
 		osg::Vec4 clr(
-			color.r,
-			color.g,
-			color.b,
-			color.a
+			color.R,
+			color.G,
+			color.B,
+			color.A
 			);
 		mesh->setColor(clr);
 		base->addChild(mesh);

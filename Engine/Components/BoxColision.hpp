@@ -12,12 +12,16 @@ public:
 
 public:
 
-	Vector3f GetExtends() const	{ return extends; }
-	void SetExtends(Vector3f newExtends);
+	FVector GetExtends() const	
+	{ 
+		return extends; 
+	}
+
+	void SetExtends(FVector newExtends);
 
 protected:
 
 	/// >> 
-	Vector3f extends;
+	FVector extends;
 	///
 };

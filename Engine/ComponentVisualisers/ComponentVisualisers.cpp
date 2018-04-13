@@ -1,6 +1,4 @@
 #include "ComponentVisualisers.hpp"
-#include "ComponentVisualisers.hpp"
-
 #include "ActorComponent.hpp"
 #include "ComponentVisualiser.hpp"
 
@@ -22,7 +20,10 @@ void ComponentVisualisers::Visualise(ActorComponent* component, IViewer* viewer)
 	if (itr != end)
 	{
 		auto helper = ComponentVisualiserHelper(viewer);
-		itr->second->Visualize(component, helper);
+		if (auto visualiser = itr->second)
+		{
+			visualiser->Visualize(component, helper);
+		}
 	}
 }
 

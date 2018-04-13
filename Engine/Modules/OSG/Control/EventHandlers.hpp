@@ -4,10 +4,6 @@
 
 #include "Control/EventCollector.hpp"
 
-//***********
-//***********	TODO: make base handler class to handle modifiers in only place
-//***********
-
 
 class KeyHandler_base : public osgGA::GUIEventHandler
 {

@@ -7,59 +7,59 @@ ActorComponent::ActorComponent()
 	: owner(ThreadContext::TopInitialiser()->owner)
 	, parent(nullptr)
 
-	, relativeTarnsform(Transform::getIdentity())
-	, worldTransform   (Transform::getIdentity())
+	, relativeTarnsform(FTransform::Identity)
+	, worldTransform   (FTransform::Identity)
 	
 	, facade(ModuleManager::MakeFacade(this))
 {}
 
-void ActorComponent::AddForce(const Vector3f& force, ESpaceType space)
+void ActorComponent::AddForce(const FVector& force, ESpaceType space)
 {
 	//TODO:
 }
 
-void ActorComponent::AddTorque(const Vector3f& torue, ESpaceType space)
+void ActorComponent::AddTorque(const FVector& torue, ESpaceType space)
 {
 	//TODO:
 }
 
-void ActorComponent::SetComponentTransform(Transform newTransform)
+void ActorComponent::SetComponentTransform(FTransform newTransform)
 {
 	worldTransform = newTransform;
 	UpdateRelativeTransform();
 }
 
-void ActorComponent::SetRelativeTransform(Transform newTransform)
+void ActorComponent::SetRelativeTransform(FTransform newTransform)
 {
 	relativeTarnsform = newTransform;
 	UpdateWoldTransform();
 }
 
-void ActorComponent::SetComponentLocation(Vector3f newLocation)
+void ActorComponent::SetComponentLocation(FVector newLocation)
 {
-	worldTransform.origin = newLocation;
+	worldTransform.Location = newLocation;
 	UpdateRelativeTransform();
 }
 
-void ActorComponent::SetRelativeLocation(Vector3f newLocation)
+void ActorComponent::SetRelativeLocation(FVector newLocation)
 {
-	relativeTarnsform.origin = newLocation;
+	relativeTarnsform.Location = newLocation;
 	UpdateWoldTransform();
 }
 
-void ActorComponent::SetComponentRotation(Quatf newRotation)
+void ActorComponent::SetComponentRotation(FQuat newRotation)
 {
-	worldTransform.rotation = newRotation;
+	worldTransform.Rotation = newRotation;
 	UpdateRelativeTransform();
 }
 
-void ActorComponent::SetRelativeRotation(Quatf newRotation)
+void ActorComponent::SetRelativeRotation(FQuat newRotation)
 {
-	relativeTarnsform.rotation = newRotation;
+	relativeTarnsform.Rotation = newRotation;
 	UpdateWoldTransform();
 }
 
-void ActorComponent::AddTransform(Transform delta, ESpaceType space)
+void ActorComponent::AddTransform(FTransform delta, ESpaceType space)
 {	
 	if (space == ESpaceType::eLocal)
 	{
@@ -79,17 +79,17 @@ void ActorComponent::AddTransform(Transform delta, ESpaceType space)
 		UpdateWoldTransform();
 		return;
 	}
-	assert(false);
+	assert(false); //TODO: log
 }
 
-void ActorComponent::AddComponentLocation(Vector3f delta, ESpaceType space)
+void ActorComponent::AddComponentLocation(FVector delta, ESpaceType space)
 {
-	AddTransform(Transform(delta), space);
+	AddTransform(FTransform(delta), space);
 }
 
-void ActorComponent::AddComponentRotation(Quatf delta, ESpaceType space)
+void ActorComponent::AddComponentRotation(FQuat delta, ESpaceType space)
 {
-	AddTransform(Transform(delta), space);
+	AddTransform(FTransform(delta), space);
 }
 
 const PlayerController* ActorComponent::GetPlayerController() const
@@ -121,20 +121,16 @@ void ActorComponent::AttachTo(ActorComponent* newParent)
 
 void ActorComponent::Detach()
 {
-	if (parent)	
+	if (parent && world)
 	{
-		auto pos = parent->subcomponents.begin();
+		auto bgn = parent->subcomponents.begin();
 		auto end = parent->subcomponents.end();
-
-		for (; pos != end; ++pos)
+		auto pos = std::find(bgn, end, this);
+		if (pos != end)
 		{
-			if (*pos == this)
-			{
-				parent->subcomponents.erase(pos);
-				break;
-			}
+			parent->subcomponents.erase(pos);
 		}
-		parent = world->GetSceneRoot(); //TODO
+		parent = world->GetSceneRoot();
 
 		facade->Detach();
 	}
@@ -192,16 +188,16 @@ void ActorComponent::UpdateFacade()
 
 void ActorComponent::UpdateWoldTransform()
 {
-	Transform P = GetParentTransform();
-	Transform R = GetRelativeTransform();
+	FTransform P = GetParentTransform();
+	FTransform R = GetRelativeTransform();
 	worldTransform = P * R;
 	UpdateChainTransforms();
 }
 
 void ActorComponent::UpdateRelativeTransform()
 {
-	Transform P = GetParentTransform();
-	Transform W = GetComponentTransform();
+	FTransform P = GetParentTransform();
+	FTransform W = GetComponentTransform();
 	relativeTarnsform = ~P * W;
 	UpdateChainTransforms();
 }
@@ -219,7 +215,7 @@ void ActorComponent::UpdateChainTransforms()
 	}
 }
 
-Transform ActorComponent::GetParentTransform() const
+FTransform ActorComponent::GetParentTransform() const
 {
-	return parent ? parent->GetComponentTransform() : Transform::getIdentity();
+	return parent ? parent->GetComponentTransform() : FTransform::Identity;
 }

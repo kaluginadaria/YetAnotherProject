@@ -1,5 +1,5 @@
 MAKE_MODULE(Misc)
 SET(CATEGORY "Engine")
-file(GLOB SOURCES *.cpp)
-file(GLOB HEADERS *.hpp)
+file(GLOB_RECURSE SOURCES *.cpp)
+file(GLOB_RECURSE HEADERS *.hpp)
 SETUP_MODULE()

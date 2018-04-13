@@ -17,7 +17,7 @@ public:
 
 public:
 	virtual void Render() override;
-	virtual void DrawShape(FShape shape, Transform transform, Vector4f color) override;
+	virtual void DrawShape(FShape shape, FTransform transform, FColor color) override;
 
 protected:
 	Facade* GetRootFacade();

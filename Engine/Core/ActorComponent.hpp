@@ -33,37 +33,37 @@ public:
 
 public: //~~~~~~~~~~~~~~| Physics
 
-	void AddForce (const Vector3f& force, ESpaceType space);
-	void AddTorque(const Vector3f& torue, ESpaceType space);
+	void AddForce (const FVector& force, ESpaceType space);
+	void AddTorque(const FVector& torue, ESpaceType space);
 
 public: //~~~~~~~~~~~~~~| Position
 
 	/// transform
 
-	void SetComponentTransform(Transform newTransform);
-	void SetRelativeTransform (Transform newTransform);
-	Transform GetComponentTransform() const { return worldTransform;    }
-	Transform GetRelativeTransform () const { return relativeTarnsform; }
+	void SetComponentTransform(FTransform newTransform);
+	void SetRelativeTransform (FTransform newTransform);
+	FTransform GetComponentTransform() const { return worldTransform;    }
+	FTransform GetRelativeTransform () const { return relativeTarnsform; }
 
 	/// location
 
-	void SetComponentLocation(Vector3f newLocation);
-	void SetRelativeLocation (Vector3f newLocation);
-	Vector3f  GetComponentLocation() const { return worldTransform   .getOrigin(); }
-	Vector3f  GetRelativeLocation () const { return relativeTarnsform.getOrigin(); }
+	void SetComponentLocation(FVector newLocation);
+	void SetRelativeLocation (FVector newLocation);
+	FVector  GetComponentLocation() const { return worldTransform   .Location; }
+	FVector  GetRelativeLocation () const { return relativeTarnsform.Location; }
 
 	/// rotation
 
-	void SetComponentRotation(Quatf newRotation);
-	void SetRelativeRotation (Quatf newRotation);
-	Quatf GetComponentRotation() const { return worldTransform   .getRotation(); }
-	Quatf GetRelativeRotation () const { return relativeTarnsform.getRotation(); }
+	void SetComponentRotation(FQuat newRotation);
+	void SetRelativeRotation (FQuat newRotation);
+	FQuat GetComponentRotation() const { return worldTransform   .Rotation; }
+	FQuat GetRelativeRotation () const { return relativeTarnsform.Rotation; }
 
 	/// add
 
-	void AddTransform		 (Transform delta, ESpaceType space = ESpaceType::eWorld);
-	void AddComponentLocation(Vector3f	delta, ESpaceType space = ESpaceType::eWorld);
-	void AddComponentRotation(Quatf     delta, ESpaceType space = ESpaceType::eWorld);
+	void AddTransform		 (FTransform delta, ESpaceType space = ESpaceType::eWorld);
+	void AddComponentLocation(FVector	 delta, ESpaceType space = ESpaceType::eWorld);
+	void AddComponentRotation(FQuat      delta, ESpaceType space = ESpaceType::eWorld);
 
 public: //~~~~~~~~~~~~~~| Chain
 
@@ -112,7 +112,7 @@ protected:
 	void UpdateRelativeTransform();
 	void UpdateChainTransforms();
 
-	Transform GetParentTransform() const;
+	FTransform GetParentTransform() const;
 
 protected:
 
@@ -126,8 +126,8 @@ protected:
 	///
 
 	/// >> position
-	Transform relativeTarnsform;
-	Transform worldTransform;
+	FTransform relativeTarnsform;
+	FTransform worldTransform;
 	/// <<
 
 	/// >> tree

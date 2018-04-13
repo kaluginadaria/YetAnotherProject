@@ -6,11 +6,9 @@ project(YetAnotherProject)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 INCLUDE("Cmake/DefaultSetup.cmake")
 INCLUDE("Cmake/MacroUtiles.cmake")
-INCLUDE("Cmake/VMath.cmake")
 
 SET(3rdParty "${CMAKE_SOURCE_DIR}/3rdParty")
 SetupEvniroment()
-DefineVMath()
 	
 #~~~~~~~~~~~~~~~~~~~~~~~| >> init project |
 INIT_PROJECT(Engine Pendulum)
