@@ -6,6 +6,8 @@
 #include "Control/EventBinder.hpp"
 #include "PID.hpp"
 
+#include <iostream>
+
 
 class Pendulum : public Avatar
 {
@@ -42,15 +44,15 @@ public:
 		auto tr = target  ->GetComponentRotation();
 		auto cr = pendulum->GetComponentRotation();
 		auto delta = ~cr * tr;
-
+		
 		const float control = pid.GetValue(delta.Y, dt);
 		const float inertia = 600;
 		const float M0      = 100;
-
+		
 		const float M  = M0 * control;
 		const float dw = RAD2DEG(M / inertia * dt);
 		w += dw;
-
+		
 		pendulum->AddComponentRotation(FQuat(0, w * dt, 0), eParent);
 	}
 

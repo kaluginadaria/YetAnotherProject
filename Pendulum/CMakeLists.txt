@@ -1,20 +1,6 @@
-#TODO:: make a system that automatically imports 3rd party dependences from modules
-
-MAKE_MODULE(Pendulum)
-find_package(OpenGL			REQUIRED)
-find_package(OpenSceneGraph REQUIRED
-	osgViewer
-	osgWidget
-	osgDB
-	osgGA )
-SET(INCLUDES
-	${OPENSCENEGRAPH_INCLUDE_DIRS}
-	${OPENGL_INCLUDE_DIRS} )
-SET(LIBRARIES
-	${OPENSCENEGRAPH_LIBRARIES}
-	${OPENGL_LIBRARIES} )
-SET(MODULES OSG Core Misc Components)
-SET(CATEGORY "Project")
-file(GLOB_RECURSE SOURCES *.cpp)
-file(GLOB_RECURSE HEADERS *.hpp)
-SETUP_APP()
+DEFINE_UNIT(Pendulum)
+SET(CODE		"Sources"	)
+SET(TEST    	"Tests" 	)
+SET(CATEGORY	"Project"	)
+SET(MODULES 	 Misc Core Components OSG ComponentVisualisers)
+MAKE_APP()

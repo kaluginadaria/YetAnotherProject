@@ -9,7 +9,7 @@ class GameMode;
 
 struct ISimulationModeConfig
 {
-	float simlationStep;
+	float simlationStep = 0;
 
 	virtual UNIQUE(GameMode        ) GetDefaultGameMode        (Initialiser* init) = 0;
 	virtual UNIQUE(PlayerController) GetDefaultPlayerController(Initialiser* init) = 0;
@@ -21,7 +21,7 @@ struct TSimulationModeConfig : public ISimulationModeConfig
 {
 	TSimulationModeConfig()
 	{
-		simlationStep = 1/60;
+		simlationStep = 1/20.f;
 	}
 
 	virtual UNIQUE(GameMode) GetDefaultGameMode(Initialiser* init) override

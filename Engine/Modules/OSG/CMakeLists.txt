@@ -1,18 +1,20 @@
-MAKE_MODULE(OSG)
 find_package(OpenGL			REQUIRED)
 find_package(OpenSceneGraph REQUIRED
 	osgViewer
 	osgWidget
 	osgDB
 	osgGA )
-SET(INCLUDES
+	
+
+DEFINE_UNIT(OSG)
+SET(PUBLIC_INCLUDES
 	${OPENSCENEGRAPH_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIRS} )
-SET(LIBRARIES
+SET(PUBLIC_LIBRARIES
 	${OPENSCENEGRAPH_LIBRARIES}
 	${OPENGL_LIBRARIES} )
-SET(MODULES Core Misc Components ComponentVisualisers)
-SET(CATEGORY "Engine/Modules")	
-file(GLOB_RECURSE SOURCES *.cpp)
-file(GLOB_RECURSE HEADERS *.hpp)
-SETUP_MODULE()
+SET(CODE		"Sources"	)
+SET(TEST    	"Tests" 	)
+SET(CATEGORY	"Engine"	)
+SET(MODULES 	 Misc Core Components ComponentVisualisers )
+MAKE_MODULE()

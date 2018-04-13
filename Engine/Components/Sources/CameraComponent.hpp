@@ -1,7 +1,7 @@
 #ifndef CAMERA_COMPONENT_HPP
 #define CAMERA_COMPONENT_HPP
 
-#include "../Core/ActorComponent.hpp"
+#include "ActorComponent.hpp"
 
 
 /** Camera component - is 

@@ -1,19 +1,16 @@
 #include "CameraManager.hpp"
+#include "../World.hpp"
 
 #include <assert.h>
 
-#include "../World.hpp"
-#include "../../Components/CameraComponent.hpp"
 
-
-CameraManager::CameraManager(World* world)
-	: world	(world)
-	, activeCamera(-1)
+CameraManager::CameraManager()
+	:activeCamera(-1)
 {}
 
 void CameraManager::UnregisterCamera(CameraComponent* camera)
 {
-	assert(IsValid(camera));
+	assert(camera);
 
 	int pos = FindCamera(camera);
 	if (pos != -1)
@@ -25,7 +22,7 @@ void CameraManager::UnregisterCamera(CameraComponent* camera)
 
 void CameraManager::RegisterCamera(CameraComponent* camera, bool bActivate)
 {
-	assert(IsValid(camera));
+	assert(camera);
 
 	int pos = PlaceCamera(camera);
 	assert(pos != -1);
@@ -38,7 +35,7 @@ void CameraManager::RegisterCamera(CameraComponent* camera, bool bActivate)
 
 void CameraManager::SetCameraActive(CameraComponent* camera, bool newState)
 {
-	assert(IsValid(camera));
+	assert(camera);
 
 	if (newState)
 	{
@@ -70,11 +67,6 @@ const CameraComponent* CameraManager::GetCurrentCamera() const
 		return cameras[activeCamera];
 	}
 	return nullptr;
-}
-
-bool CameraManager::IsValid(CameraComponent* camera)
-{
-	return world && world->IsValid(camera);
 }
 
 int CameraManager::FindCamera(CameraComponent* camera)

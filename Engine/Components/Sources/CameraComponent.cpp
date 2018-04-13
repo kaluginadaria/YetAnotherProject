@@ -1,6 +1,6 @@
 #include "CameraComponent.hpp"
 
-#include "../Core/PlayerController.hpp"
+#include "PlayerController.hpp"
 
 
 CameraComponent::CameraComponent()

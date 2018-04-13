@@ -21,7 +21,7 @@ class CameraManager
 {
 public:
 
-	CameraManager(World* world);
+	CameraManager();
 
 	void UnregisterCamera(CameraComponent* camera);
 	void RegisterCamera	 (CameraComponent* camera, bool bActivate = true);
@@ -40,10 +40,6 @@ protected:
 	void RemoveCamera(int currentPos);
 
 protected:
-
-	/// >> common
-	World* world;
-	/// <<
 
 	/// >> cameras
 	int activeCamera;

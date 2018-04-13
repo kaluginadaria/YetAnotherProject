@@ -15,7 +15,7 @@ const unsigned int MASK_3D = 0x0F000000;
 
 
 PlayerController::PlayerController()
-	: cameraManager(world)
+	: cameraManager()
 	, viewer(ModuleManager::MakeViewer(this))
 {}
 

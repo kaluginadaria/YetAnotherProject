@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "../Core/ActorComponent.hpp"
+#include "ActorComponent.hpp"
 
 class BoxColision : public ActorComponent
 {

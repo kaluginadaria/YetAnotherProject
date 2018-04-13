@@ -1,34 +1,68 @@
 
+# add unit's sources/headers to the project
+#
 MACRO(__SETUP_SOURCE)
-	source_group(TREE ${PROJECT_SOURCE_DIR} PREFIX "Source Files" FILES ${SOURCES})
-	source_group(TREE ${PROJECT_SOURCE_DIR} PREFIX "Header Files" FILES ${HEADERS})
-ENDMACRO()
-
-MACRO(__SETUP_INCLUDES)
-	FOREACH(module ${MODULES})
-		get_property(module_DIR GLOBAL PROPERTY ${module}_DIR)
-		list(APPEND MODULES_INCLUDE_DIRS ${module_DIR}) 
-	ENDFOREACH()
-	list(APPEND INCLUDES ${MODULES_INCLUDE_DIRS})
+	SET(SOURCES_DIRS ${CODE})
+	SET(HEADERS_DIRS ${CODE})
 	
-	include_directories(${HEADERS} ${INCLUDES})
+	# find project files
+	file(GLOB_RECURSE SOURCES "${SOURCES_DIRS}/*.cpp")
+	file(GLOB_RECURSE HEADERS "${HEADERS_DIRS}/*.hpp")
+	
+	# add the files into project's code
+	source_group(TREE ${PROJECT_SOURCE_DIR}/${SOURCES_DIRS} PREFIX "Source Files" FILES ${SOURCES})
+	source_group(TREE ${PROJECT_SOURCE_DIR}/${HEADERS_DIRS} PREFIX "Header Files" FILES ${HEADERS})
 ENDMACRO()
 
-MACRO(__SETUP_LINKS)
+# add required includes (from other modules and 3rdParty)
+#
+MACRO(__SETUP_INCLUDES)
+	# get public includes from assigned units
 	FOREACH(module ${MODULES})
-		list(APPEND MODULES_LINKS ${module})
+		get_property(unit_DIR GLOBAL PROPERTY ${module}_DIR)
+		list(APPEND MODULE_INCLUDES ${unit_DIR}) 
 	ENDFOREACH()
-	list(APPEND LINKS ${MODULES_LINKS})
-	list(APPEND LINKS ${LIBRARIES})
-	target_link_libraries(${TARGET} ${LINKS})
+	
+	# combine project includes
+	set(ALL_INCLUDES ${HEADERS_DIRS} ${INCLUDES} ${PUBLIC_INCLUDES} ${MODULE_INCLUDES})
+	
+	# add the includes into the project
+	include_directories(${ALL_INCLUDES})
 ENDMACRO()
 
+# link required libs
+#
+MACRO(__SETUP_LINKS)
+	# get public libs from assigned modules
+	FOREACH(module ${MODULES})
+		get_property(unit_LIB GLOBAL PROPERTY ${module}_LIB)
+		list(APPEND MODULE_LIBS ${unit_LIB})
+	ENDFOREACH()
+	
+	# combine project links
+	SET(ALL_LINKS ${MODULE_LIBS} ${LIBRARIES} ${PUBLIC_LIBRARIES})
+	
+	# add the libs into the project
+	target_link_libraries(${TARGET} ${ALL_LINKS})
+ENDMACRO()
+
+# set project's folder in  vs project
+#
 MACRO(__SETUP_FOLDER)
 	SET_TARGET_PROPERTIES(${TARGET} PROPERTIES FOLDER "${CATEGORY}")
 ENDMACRO()
 
+# add module meta into a global space
+#
 MACRO(__DEFINE_MODULE)
-	set_property(GLOBAL PROPERTY ${TARGET}_DIR ${PROJECT_SOURCE_DIR})
+	get_filename_component(PB_HEADERS_DIRS    "${HEADERS_DIRS}"    ABSOLUTE)
+	get_filename_component(PB_PUBLIC_INCLUDES "${PUBLIC_INCLUDES}" ABSOLUTE)
+
+	SET(TARGET_PUBLIC_DIRS ${PB_HEADERS_DIRS} ${PB_PUBLIC_INCLUDES})
+	SET(TARGET_PUBLIC_LIBS ${TARGET}          ${PUBLIC_LIBRARIES}  )
+
+	set_property(GLOBAL PROPERTY ${TARGET}_DIR ${TARGET_PUBLIC_DIRS})
+	set_property(GLOBAL PROPERTY ${TARGET}_LIB ${TARGET_PUBLIC_LIBS})
 ENDMACRO()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,18 +72,36 @@ MACRO(INIT_PROJECT ENGINE PROJECT)
 ENDMACRO()
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-MACRO(MAKE_MODULE NAME)
-	SET(TARGET ${NAME})	
-	project(${TARGET})
-	__DEFINE_MODULE()
-	SET(MODULES)
-	SET(HEADERS)
-	SET(SOURCES)
-	SET(INCLUDES)
-	SET(CATEGORY)
+# define new unit (module / application)
+#
+MACRO(DEFINE_UNIT NAME)
+	SET(TARGET ${NAME})		# unit name
+	project(${TARGET})		# create a cmake project
+	__DEFINE_MODULE()		# add the unit's meta into a global space
+	
+	#-------------------------------------------------# interface variables
+	SET(MODULES)			# required modules
+	SET(CATEGORY)			# project folder in a solution	
+	SET(CODE)				# directory with project code
+	SET(TEST)				# directory with project tests
+	
+	SET(INCLUDES)			# include files from 3rdParty
+	SET(LIBRARIES)			# .lib    files from 3tdParty	
+	SET(PUBLIC_INCLUDES)	# include files from 3rdParty
+	SET(PUBLIC_LIBRARIES)	# .lib 	  files from 3tdParty
+	
+	#-------------------------------------------------# internal variables
+	SET(HEADERS_DIRS)		# found includes for the unit
+	SET(SOURCES_DIRS)		# found sources  for the unit
+	
+	# NOTE:
+	# PUBLIC_*		will be also exported to up linking modules
 ENDMACRO()
 
-MACRO(SETUP_MODULE)
+
+# use the unit as an module
+#
+MACRO(MAKE_MODULE)
 	__SETUP_SOURCE()
 	__SETUP_INCLUDES()
 	add_library(${TARGET} 
@@ -57,11 +109,14 @@ MACRO(SETUP_MODULE)
 		${SOURCES}
 		${INCLUDES}
 		)
-	__SETUP_LINKS()
 	__SETUP_FOLDER()
+	__DEFINE_MODULE()
 ENDMACRO()
 
-MACRO(SETUP_APP)
+
+# use the unit as an application
+#
+MACRO(MAKE_APP)
 	__SETUP_SOURCE()
 	__SETUP_INCLUDES()
 	add_executable(${TARGET} 
@@ -71,4 +126,5 @@ MACRO(SETUP_APP)
 		)
 	__SETUP_LINKS()
 	__SETUP_FOLDER()
+	__DEFINE_MODULE()
 ENDMACRO()
