@@ -20,21 +20,6 @@ void EventCollector::CollectMousPosition(float x, float y)
 	mouse_Y = y;
 }
 
-const std::vector<KeyEvent>& EventCollector::GetEvents() const
-{
-	return events;
-}
-
-float EventCollector::GetMouseX() const
-{
-	return mouse_X;
-}
-
-float EventCollector::GetMouseY() const
-{
-	return mouse_Y;
-}
-
 void EventCollector::Flush()
 {
 	events.resize(0);

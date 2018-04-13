@@ -3,5 +3,7 @@
 
 Avatar::Avatar()
 {
-	controller = static_cast<PlayerController*>(ThreadContext::TopInitialiser()->controller);
+	auto* init = ThreadContext::TopInitialiser();
+	assert(init);
+	controller = dynamic_cast<PlayerController*>(init->controller);
 }

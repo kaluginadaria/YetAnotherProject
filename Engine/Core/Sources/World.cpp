@@ -1,19 +1,13 @@
 #include "World.hpp"
 #include "Actor.hpp"
-#include "Threading/ThreadPull.hpp"
+#include "Threading/ThreadPool.hpp"
 
 
 World::World()
 	: SimulationState(eUnstarted)
 {
-	std::string name = "scene Root";
-	auto* init = new Initialiser;
-	init->name = &name;
-	init->world = this;
-
-	ThreadContext::PushInitialiser(init);
-	sceneRoot = CreateObject<ActorComponent>();
-	ThreadContext::PopInitialiser();
+	// to make a scene root it's enough to use the function
+	sceneRoot = ObjectCreator::CreateObject<ActorComponent>(std::string("scene Root"), this);
 }
 
 World::~World()
@@ -23,14 +17,14 @@ void World::OnSimulationStart()
 {
 	SimulationState = eInProgress;
 
-	for (Object* object : objects_set) object->OnBeginPlay();
+	for (auto object : objects_set) object->OnBeginPlay();
 }
 
 void World::OnSimulationStop()
 {
 	SimulationState = eStopped;
 
-	for (Object* object : objects_set) object->OnEndPlay();
+	for (auto object : objects_set) object->OnEndPlay();
 }
 
 void World::DoTick(float DeltaTime, ETickType type)
@@ -48,7 +42,7 @@ void World::DoTick(float DeltaTime, ETickType type)
 			// ));
 		}
 	}
-	// ThreadPull::AddTaskBacket(backet);
+	// ThreadPool::AddTaskBacket(backet);
 	// backet.Wait();
 }
 
@@ -118,7 +112,7 @@ bool World::SceneIterator::operator==(const SceneIterator& r) const
 	if (size_r != size_l) return false;
 	
 	bool result = true;
-	for (size_t itr = 0; itr < size_l && result; ++itr)
+	for (size_t itr = 0; itr < size_l && result; ++itr) //TODO:: std::for_each
 	{
 		result &= indices._Get_container()[itr] == r.indices._Get_container()[itr];
 		result &= path   ._Get_container()[itr] == r.path   ._Get_container()[itr];

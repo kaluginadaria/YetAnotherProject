@@ -40,8 +40,10 @@ bool CameraManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 	
 	if (auto* camera = manager.GetCurrentCamera())
 	{
+		const FQuat correction(90, -90, 0);
+
 		auto worldTransform = camera->GetComponentTransform();
-		auto rotation = worldTransform.Rotation;
+		auto rotation = worldTransform.Rotation * correction;
 		auto location = worldTransform.Location;
 
 		osg::Matrixd mr, mt;

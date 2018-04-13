@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-#include "ThreadPull.hpp"
+#include "ThreadPool.hpp"
 
 
 const ThreadTask ThreadTask::ShouldDie = ThreadTask(nullptr, true );
@@ -39,7 +39,7 @@ void Thread::Run()
 		
 		ThreadTask currentTask = ThreadTask::NextLoop;
 
-		while (currentTask = ThreadPull::GetRunTask(this, currentTask.task), !currentTask.bDie)
+		while (currentTask = ThreadPool::GetRunTask(this, currentTask.task), !currentTask.bDie)
 		{
 			// try to take new task
 			if (currentTask.task == nullptr)

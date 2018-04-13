@@ -2,9 +2,13 @@
 #include "Threading/ThreadContext.hpp"
 
 BasePlayerController::BasePlayerController()
-	: world (ThreadContext::TopInitialiser()->world)
+	: world (nullptr)
 	, target(nullptr)
-{}
+{
+	auto* init = ThreadContext::TopInitialiser();
+	assert(init);
+	world = init->world;
+}
 
 void BasePlayerController::OnBeginPlay()
 {}

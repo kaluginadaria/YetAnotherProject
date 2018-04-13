@@ -3,9 +3,11 @@
 
 #include <assert.h>
 
+#define NOT_SELECTED -1
+
 
 CameraManager::CameraManager()
-	:activeCamera(-1)
+	:activeCamera(NOT_SELECTED)
 {}
 
 void CameraManager::UnregisterCamera(CameraComponent* camera)
@@ -13,7 +15,7 @@ void CameraManager::UnregisterCamera(CameraComponent* camera)
 	assert(camera);
 
 	int pos = FindCamera(camera);
-	if (pos != -1)
+	if (pos != NOT_SELECTED)
 	{
 		ActivateNext(pos);
 		RemoveCamera(pos);
@@ -25,7 +27,7 @@ void CameraManager::RegisterCamera(CameraComponent* camera, bool bActivate)
 	assert(camera);
 
 	int pos = PlaceCamera(camera);
-	assert(pos != -1);
+	assert(pos != NOT_SELECTED);
 
 	if (bActivate)
 	{
@@ -40,20 +42,20 @@ void CameraManager::SetCameraActive(CameraComponent* camera, bool newState)
 	if (newState)
 	{
 		int pos = FindCamera(camera);
-		assert(pos != -1);
+		assert(pos != NOT_SELECTED);
 		ActivateNext(--pos);
 	}
 	else
 	{
 		int pos = FindCamera(camera);
-		assert(pos != -1);
+		assert(pos != NOT_SELECTED);
 		ActivateNext(pos);
 	}
 }
 
 CameraComponent* CameraManager::GetCurrentCamera()
 {
-	if (activeCamera != -1)
+	if (activeCamera != NOT_SELECTED)
 	{
 		return cameras[activeCamera];
 	}
@@ -62,7 +64,7 @@ CameraComponent* CameraManager::GetCurrentCamera()
 
 const CameraComponent* CameraManager::GetCurrentCamera() const
 {
-	if (activeCamera != -1)
+	if (activeCamera != NOT_SELECTED)
 	{
 		return cameras[activeCamera];
 	}
@@ -78,7 +80,7 @@ int CameraManager::FindCamera(CameraComponent* camera)
 			return i;
 		}
 	}
-	return -1;
+	return NOT_SELECTED;
 }
 
 int CameraManager::PlaceCamera(CameraComponent* camera)
@@ -91,13 +93,15 @@ void CameraManager::ActivateNext(int currentPos)
 {
 	int size = (int)cameras.size();
 
-	if (size > 2 || currentPos == -1)
+	// if we have another camera to switch on
+	// or we add a first one
+	if (size > 2 || currentPos == NOT_SELECTED)
 	{
 		activeCamera = (currentPos + 1) % size;
 	}
 	else
 	{
-		activeCamera = -1;
+		activeCamera = NOT_SELECTED;
 	}
 }
 

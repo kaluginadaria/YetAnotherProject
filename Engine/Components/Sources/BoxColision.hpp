@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef BOX_COLISION_HPP
+#define BOX_COLISION_HPP
 
 #include "ActorComponent.hpp"
 
@@ -25,3 +25,5 @@ protected:
 	FVector extends;
 	///
 };
+
+#endif

@@ -22,7 +22,7 @@ public:
 
 	bool AddTask   (IRunable* newTask);
 	bool MarkAsDone(IRunable* doneTask);
-	bool IsComplitted();
+	bool IsCompleted();
 	
 	IRunable* GetTask();
 
@@ -45,7 +45,7 @@ protected:
 
 /** Sungletone handleing threads and takeing Ranables
  */
-class ThreadPull
+class ThreadPool
 {
 	struct BacketRunable : public IRunable
 	{

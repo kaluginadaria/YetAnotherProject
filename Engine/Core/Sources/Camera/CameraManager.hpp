@@ -4,8 +4,6 @@
 #include <deque>
 #include <vector>
 
-
-class World;
 class CameraComponent;
 
 
@@ -20,7 +18,6 @@ class CameraComponent;
 class CameraManager
 {
 public:
-
 	CameraManager();
 
 	void UnregisterCamera(CameraComponent* camera);
@@ -31,8 +28,6 @@ public:
 	const CameraComponent* GetCurrentCamera() const;
 
 protected:
-
-	bool IsValid	(CameraComponent* camera);
 	int  FindCamera	(CameraComponent* camera);
 	int  PlaceCamera(CameraComponent* camera);
 
@@ -40,7 +35,6 @@ protected:
 	void RemoveCamera(int currentPos);
 
 protected:
-
 	/// >> cameras
 	int activeCamera;
 	std::deque<CameraComponent*> cameras;

@@ -6,8 +6,8 @@
 class World;
 class CameraComponent;
 class CameraManager;
-class EventCollector;
 class PlayerController;
+struct EventCollector;
 
 
 struct IViewer

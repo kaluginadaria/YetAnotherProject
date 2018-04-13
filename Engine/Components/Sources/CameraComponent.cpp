@@ -7,9 +7,7 @@ CameraComponent::CameraComponent()
 	: bActive		(false)
 	, bRegistered	(false)
 	, bAutoRegister	(true )
-{
-	AddComponentRotation({90, -90, 0}, eLocal);
-}
+{}
 
 void CameraComponent::OnBeginPlay()
 {

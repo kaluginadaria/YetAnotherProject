@@ -21,7 +21,7 @@ struct TSimulationModeConfig : public ISimulationModeConfig
 {
 	TSimulationModeConfig()
 	{
-		simlationStep = 1/20.f;
+		simlationStep = 1/30.f;
 	}
 
 	virtual UNIQUE(GameMode) GetDefaultGameMode(Initialiser* init) override

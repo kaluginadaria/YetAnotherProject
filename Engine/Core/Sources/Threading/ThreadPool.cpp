@@ -1,4 +1,4 @@
-#include "ThreadPull.hpp"
+#include "ThreadPool.hpp"
 
 #include <assert.h>
 
@@ -52,7 +52,7 @@ bool TaskBacket::MarkAsDone(IRunable* doneTask)
 	}
 }
 
-bool TaskBacket::IsComplitted()
+bool TaskBacket::IsCompleted()
 {
 	return bComplitted;
 }
@@ -87,26 +87,26 @@ void TaskBacket::Wait()
 }
 
 /********************************************************************
-*							ThreadPull
+*							ThreadPool
 ********************************************************************/
 
-std::deque<IRunable*>   ThreadPull::tasks			= std::deque<IRunable*>();
-std::deque<IRunable*>   ThreadPull::tasks_exclusive = std::deque<IRunable*>();	
-std::deque<TaskBacket*> ThreadPull::backets			= std::deque<TaskBacket*>();
+std::deque<IRunable*>   ThreadPool::tasks			= std::deque<IRunable*>();
+std::deque<IRunable*>   ThreadPool::tasks_exclusive = std::deque<IRunable*>();	
+std::deque<TaskBacket*> ThreadPool::backets			= std::deque<TaskBacket*>();
 
 
-std::unordered_set<Thread*> ThreadPull::threads			  = std::unordered_set<Thread*>();
-std::unordered_set<Thread*> ThreadPull::threads_exclusive = std::unordered_set<Thread*>();
+std::unordered_set<Thread*> ThreadPool::threads			  = std::unordered_set<Thread*>();
+std::unordered_set<Thread*> ThreadPool::threads_exclusive = std::unordered_set<Thread*>();
 
-std::unordered_map<Thread*, UNIQUE(Thread)> ThreadPull::allThreads;
-
-
-std::atomic<size_t>	ThreadPull::maxThreadCount = 1;	//TODO: rocever the multythreading (if there are more then 1 thread - boom | when you try to take a new task)
-std::atomic<bool>   ThreadPull::bProcessBacket = false;
+std::unordered_map<Thread*, UNIQUE(Thread)> ThreadPool::allThreads;
 
 
+std::atomic<size_t>	ThreadPool::maxThreadCount = 1;	//TODO: rocever the multythreading (if there are more then 1 thread - boom | when you try to take a new task)
+std::atomic<bool>   ThreadPool::bProcessBacket = false;
 
-bool ThreadPull::AddTask(IRunable* task, bool bExlusiveThread)
+
+
+bool ThreadPool::AddTask(IRunable* task, bool bExlusiveThread)
 {
 	if (!task) return false;
 
@@ -137,9 +137,9 @@ bool ThreadPull::AddTask(IRunable* task, bool bExlusiveThread)
 	return true;
 }
 
-bool ThreadPull::AddTaskBacket(TaskBacket& backet)
+bool ThreadPool::AddTaskBacket(TaskBacket& backet)
 {
-	if (backet.IsComplitted()) return true;
+	if (backet.IsCompleted()) return true;
 
 	{ LOCK(mutex_backets);  
 		backets.emplace_back(&backet);
@@ -149,7 +149,7 @@ bool ThreadPull::AddTaskBacket(TaskBacket& backet)
 	return true;
 }
 
-ThreadTask ThreadPull::GetRunTask(Thread* thread, IRunable* complittedTask)
+ThreadTask ThreadPool::GetRunTask(Thread* thread, IRunable* complittedTask)
 {
 	if (!thread) return ThreadTask();
 
@@ -189,7 +189,7 @@ ThreadTask ThreadPull::GetRunTask(Thread* thread, IRunable* complittedTask)
 	return result;
 }
 
-ThreadTask ThreadPull::GetRunTask_common(Thread* thread, IRunable* complittedTask)
+ThreadTask ThreadPool::GetRunTask_common(Thread* thread, IRunable* complittedTask)
 {
 	ThreadTask result = ThreadTask::NextLoop;
 
@@ -222,7 +222,7 @@ ThreadTask ThreadPull::GetRunTask_common(Thread* thread, IRunable* complittedTas
 	return result;
 }
 
-ThreadTask ThreadPull::GetRunTask_backet(Thread* thread, IRunable* complittedTask)
+ThreadTask ThreadPool::GetRunTask_backet(Thread* thread, IRunable* complittedTask)
 {
 	ThreadTask result = ThreadTask::NextLoop;
 
@@ -234,7 +234,7 @@ ThreadTask ThreadPull::GetRunTask_backet(Thread* thread, IRunable* complittedTas
 		}
 		else
 		{
-			bDone = backets.front()->IsComplitted();
+			bDone = backets.front()->IsCompleted();
 		}
 
 		if (!bDone) // try to get a new task
@@ -265,7 +265,7 @@ ThreadTask ThreadPull::GetRunTask_backet(Thread* thread, IRunable* complittedTas
 	return result;
 }
 
-ThreadTask ThreadPull::GetRunTask_exclusive(Thread* thread, IRunable* complittedTask)
+ThreadTask ThreadPool::GetRunTask_exclusive(Thread* thread, IRunable* complittedTask)
 {
 	ThreadTask result = ThreadTask::NextLoop;
 
@@ -287,12 +287,12 @@ ThreadTask ThreadPull::GetRunTask_exclusive(Thread* thread, IRunable* complitted
 	}
 }
 
-bool ThreadPull::ShouldDie(Thread* thread)
+bool ThreadPool::ShouldDie(Thread* thread)
 {
 	return threads.size() > maxThreadCount;
 }
 
-bool ThreadPull::NewThreadRequired(bool bExlusive)
+bool ThreadPool::NewThreadRequired(bool bExlusive)
 {
 	if (!bExlusive)
 	{
@@ -304,7 +304,7 @@ bool ThreadPull::NewThreadRequired(bool bExlusive)
 	}
 }
 
-void ThreadPull::CreateThread(bool bExlusive)
+void ThreadPool::CreateThread(bool bExlusive)
 {
 	UNIQUE(Thread) newThread = Thread::Get();
 	
@@ -324,7 +324,7 @@ void ThreadPull::CreateThread(bool bExlusive)
 	thread_ptr->Run();
 }
 
-void ThreadPull::DeleteThread(bool bExlusive, Thread* thread)
+void ThreadPool::DeleteThread(bool bExlusive, Thread* thread)
 {
 	if (!bExlusive)
 	{

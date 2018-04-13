@@ -9,36 +9,20 @@
 
 using ThreadID = std::thread::id;
 
-/** Thread 
- *	The thread:
- *	. takes a free task from ThreadPull
- *	. process the selected task
- *	. goes to the TreadPull for the next one
- * 
- *	NOTE:
- *	. to stop the thread TP should send him 'bDie == 1'
- *	
- *	see:
- *	@ThreadTask
- *	@ThreadPull
- */
-class Thread
+
+class Thread final
 {
 public:
-
-	Thread();
+	         Thread();
 	virtual ~Thread();
 
-	/** Creates a new thread */
+	// Creates a new thread
 	static UNIQUE(Thread) Get();
-
-public:
-
 	static ThreadID GetThreadID();
 
+public:
 	void Run();
 
-
-
+private:
 	bool bAcive;
 };

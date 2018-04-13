@@ -42,11 +42,13 @@ public: //~~~~~~~~~~~~~~| Construction
 	template<class _T>
 	_T* CreateObject()
 	{
-		std::string& name = *ThreadContext::TopInitialiser()->name;
-		UpdateNameToUnique(name);
+		auto* initialiser = ThreadContext::TopInitialiser();
+		assert(initialiser);
+		auto* name = initialiser->name;
+		assert(name);
+		UpdateNameToUnique(*name);
 
 		OUID newOUID = lastOUID++;
-
 		ThreadContext::TopInitialiser()->ouid = newOUID;
 
 		auto base = UNIQUE(ObjectBase)(new _T);

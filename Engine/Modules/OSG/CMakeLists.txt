@@ -15,6 +15,6 @@ SET(PUBLIC_LIBRARIES
 	${OPENGL_LIBRARIES} )
 SET(CODE		"Sources"	)
 SET(TEST    	"Tests" 	)
-SET(CATEGORY	"Engine"	)
+SET(CATEGORY	"Engine/Modules"	)
 SET(MODULES 	 Misc Core Components ComponentVisualisers )
 MAKE_MODULE()

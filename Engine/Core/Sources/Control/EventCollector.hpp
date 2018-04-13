@@ -5,8 +5,13 @@
 #include "ControlTypes.hpp"
 
 
-class EventCollector
+struct EventCollector
 {
+public:
+	std::vector<KeyEvent> events;
+	float mouse_X;
+	float mouse_Y;
+
 public:
 
 	void CollectKeyEvent	(KeyEvent newEvent);
@@ -14,17 +19,5 @@ public:
 
 public:
 
-	const std::vector<KeyEvent>& GetEvents() const;
-
-	float GetMouseX() const;
-	float GetMouseY() const;
-
 	void Flush();
-
-protected:
-
-	std::vector<KeyEvent> events;
-
-	float mouse_X;
-	float mouse_Y;
 };

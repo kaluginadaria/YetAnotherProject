@@ -88,7 +88,7 @@ public:
 public:
 	
 	template<class _Fx, class _T>
-	void BindFuctoin(_Fx func, _T* newTarget)
+	void BindFunction(_Fx func, _T* newTarget)
 	{
 		target = newTarget;
 		function = std::function<void(float, ETickType)>(std::bind(
@@ -103,23 +103,14 @@ public:
  */
 struct Index
 {
+public:
 	size_t index;
 
 public:
-
 	Index() : index(0) {}
-
-	size_t operator++() {
-		return ++index;
-	}
-
-	size_t operator++(int) {
-		return ++index;
-	}
-
-	operator size_t() {
-		return index;
-	}
+	size_t operator++(   ) { return ++index; }
+	size_t operator++(int) { return ++index; }
+	operator size_t()      { return   index; }
 };
 
 

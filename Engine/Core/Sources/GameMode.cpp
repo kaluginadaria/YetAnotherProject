@@ -4,10 +4,12 @@
 #include "PlayerController.hpp"
 
 GameMode::GameMode()
-	: simulationMode(ThreadContext::TopInitialiser()->simulation)
-	, world			(ThreadContext::TopInitialiser()->world     )
 {
-	playerController = static_cast<PlayerController*>(ThreadContext::TopInitialiser()->controller);
+	auto* init = ThreadContext::TopInitialiser();
+	assert(init);
+	world.reset(init->world);
+	simulationMode = init->simulation;
+	playerController = dynamic_cast<PlayerController*>(init->controller);
 }
 
 void GameMode::Tick(float DeltaTime, ETickType type)

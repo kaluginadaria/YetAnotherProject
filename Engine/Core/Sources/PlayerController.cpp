@@ -80,9 +80,9 @@ EventCollector& PlayerController::GetEventCollector()
 
 void PlayerController::processInput()
 {
-	auto& events  = eventCollector.GetEvents();
-	float mouse_X = eventCollector.GetMouseX();
-	float mouse_Y = eventCollector.GetMouseY();
+	auto& events  = eventCollector.events;
+	float mouse_X = eventCollector.mouse_X;
+	float mouse_Y = eventCollector.mouse_Y;
 
 	eventManager.ProcessKeys(events);
 	eventManager.UpdateMouseLocation(mouse_X, mouse_Y);

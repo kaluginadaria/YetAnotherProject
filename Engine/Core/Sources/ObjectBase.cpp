@@ -1,11 +1,14 @@
 #include "ObjectBase.hpp"
 
 ObjectBase::ObjectBase()
-	: world( ThreadContext::TopInitialiser()->world)
-	, name (*ThreadContext::TopInitialiser()->name )
-	, ouid ( ThreadContext::TopInitialiser()->ouid )
-	, type ( ThreadContext::TopInitialiser()->type )
-{}
+{
+	auto* init = ThreadContext::TopInitialiser();
+	assert(init && init->name);
+	world =  init->world;
+	name  = *init->name;
+	ouid  =  init->ouid;
+	type  =  init->type;
+}
 
 ObjectBase::~ObjectBase()
 {
