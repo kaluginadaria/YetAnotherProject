@@ -1,7 +1,8 @@
 #ifndef SIMULATION_MODE_CONFIG_HPP
 #define SIMULATION_MODE_CONFIG_HPP
+#pragma once
 
-#include "../Threading/Initialiser.hpp"
+#include "Threading/Initialiser.hpp"
 
 class PlayerController;
 class SimulationMode;

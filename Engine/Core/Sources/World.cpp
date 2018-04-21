@@ -1,10 +1,12 @@
 #include "World.hpp"
 #include "Actor.hpp"
+#include "Modules/ModuleManager.hpp"
 #include "Threading/ThreadPool.hpp"
 
 
 World::World()
 	: SimulationState(eUnstarted)
+	, scene(ModuleManager::MakeScene())
 {
 	// to make a scene root it's enough to use the function
 	sceneRoot = ObjectCreator::CreateObject<ActorComponent>(std::string("scene Root"), this);
@@ -44,6 +46,11 @@ void World::DoTick(float DeltaTime, ETickType type)
 	}
 	// ThreadPool::AddTaskBacket(backet);
 	// backet.Wait();
+
+	if (scene && type == ETickType::eInPhysics)
+	{
+		scene->Update(DeltaTime);
+	}
 }
 
 void World::RegisterTickFunction(ITickFunction& Tick)

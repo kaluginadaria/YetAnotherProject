@@ -1,5 +1,6 @@
 #ifndef CAMERA_COMPONENT_HPP
 #define CAMERA_COMPONENT_HPP
+#pragma once
 
 #include "ActorComponent.hpp"
 

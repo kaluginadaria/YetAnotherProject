@@ -1,10 +1,9 @@
 #ifndef GAME_MODE_HPP
 #define GAME_MODE_HPP
+#pragma once
 
-#include <memory>
-
-#include "Misc.hpp"
 #include "ObjectCreator.hpp"
+#include "Common.hpp"
 #include "World.hpp"
 
 class SimulationMode;

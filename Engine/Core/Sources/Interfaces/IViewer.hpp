@@ -1,13 +1,10 @@
+#pragma once
 #ifndef IVIEWER_HPP
 #define IVIEWER_HPP
 
-#include "Types.hpp"
+#include "Common.hpp"
 
-class World;
-class CameraComponent;
-class CameraManager;
-class PlayerController;
-struct EventCollector;
+class  PlayerController;
 
 
 struct IViewer
@@ -18,17 +15,10 @@ struct IViewer
 	virtual ~IViewer() = default;
 
 public:
-
 	virtual void Render() = 0;
 	virtual void DrawShape(FShape shape, FTransform transform, FColor color) = 0;
 
-	World*			 GetWorld();
-	CameraComponent* GetActiveCamera();
-	EventCollector*  GetEventCollector();
-	CameraManager*   GetCameraManager();
-
 protected:
-
 	PlayerController* controller;
 };
 

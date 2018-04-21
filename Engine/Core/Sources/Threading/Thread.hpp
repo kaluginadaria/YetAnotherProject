@@ -1,10 +1,7 @@
 #pragma once
 
 #include <thread>
-#include <memory>
-
-#include "Misc.hpp"
-
+#include "Common.hpp"
 #include "Runable.hpp"
 
 using ThreadID = std::thread::id;

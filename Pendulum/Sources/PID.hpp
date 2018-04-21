@@ -1,5 +1,6 @@
 #ifndef PID_HPP
 #define PID_HPP
+#pragma once
 
 
 class PID

@@ -1,5 +1,6 @@
 #ifndef PENDULUM_PLAYER_CONTROLLER_HPP
 #define PENDULUM_PLAYER_CONTROLLER_HPP
+#pragma once
 
 #include "PlayerController.hpp"
 

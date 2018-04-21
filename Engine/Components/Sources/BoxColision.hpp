@@ -1,29 +1,15 @@
 #ifndef BOX_COLISION_HPP
 #define BOX_COLISION_HPP
+#pragma once
 
-#include "ActorComponent.hpp"
+#include "BaseCollision.hpp"
 
-class BoxColision : public ActorComponent
+class BoxColision : public BaseCollision
 {
-	GENERATED_BODY(BoxColision, ActorComponent);
-public:
+	GENERATED_BODY(BoxColision, BaseCollision);
 
+public:
 	BoxColision();
-
-public:
-
-	FVector GetExtends() const	
-	{ 
-		return extends; 
-	}
-
-	void SetExtends(FVector newExtends);
-
-protected:
-
-	/// >> 
-	FVector extends;
-	///
 };
 
 #endif

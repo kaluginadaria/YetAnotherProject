@@ -6,8 +6,10 @@ Actor::Actor() : rootComponent(nullptr)
 
 //~~~~~~~~~~~~~~~~~~~~~~| << proxi functions
 
-void Actor::AddForce    (const FVector& force, ESpaceType space) { if (rootComponent) rootComponent->AddForce (force, space); }
-void Actor::AddTorque   (const FVector& torue, ESpaceType space) { if (rootComponent) rootComponent->AddTorque(torue, space); }
+void Actor::AddForce          (const FVector& force,   ESpaceType space) { if (rootComponent) rootComponent->AddForce          (force,   space); }
+void Actor::AddTorque         (const FVector& torue,   ESpaceType space) { if (rootComponent) rootComponent->AddTorque         (torue,   space); } 
+void Actor::AddImpulce        (const FVector& impulce, ESpaceType space) { if (rootComponent) rootComponent->AddImpulce        (impulce, space); }
+void Actor::AddKineticMomement(const FVector& moment,  ESpaceType space) { if (rootComponent) rootComponent->AddKineticMomement(moment,  space); }
 
 // transform
 

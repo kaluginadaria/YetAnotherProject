@@ -1,8 +1,8 @@
 #ifndef OBJECT_CREATOR_HPP
 #define OBJECT_CREATOR_HPP
+#pragma once
 
-#include <memory>
-#include <assert.h>
+#include "Common.hpp"
 #include "Threading/ThreadContext.hpp"
 
 class PlayerController;
@@ -91,7 +91,7 @@ public:
 		return UNIQUE(_T)(new _T);
 	}
 
-protected:
+private:
 	
 	template<class _T>
 	static _T* CreateObject(UNIQUE(Initialiser)& init)

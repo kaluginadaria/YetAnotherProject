@@ -20,7 +20,7 @@ const unsigned int MASK_3D = 0x0F000000;
 
 
 Viewer::Viewer(PlayerController* controller)
-	: IViewer(controller)
+	: FViewer(controller)
 	, window(nullptr)
 {
 	// setup windows

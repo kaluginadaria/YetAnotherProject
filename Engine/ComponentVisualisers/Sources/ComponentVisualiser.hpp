@@ -1,5 +1,6 @@
 #ifndef COMPONENT_VISUALISER_HPP
 #define COMPONENT_VISUALISER_HPP
+#pragma once
 
 #include "ComponentVisualiserHelper.hpp"
 #include "ActorComponent.hpp"

@@ -10,86 +10,109 @@ ActorComponent::ActorComponent()
 	, relativeTarnsform(FTransform::Identity)
 	, worldTransform   (FTransform::Identity)
 	
-	, facade(ModuleManager::MakeFacade(this))
+	, facade   (ModuleManager::MakeFacade(this))
+	, rigidBody(nullptr)
 {}
 
 void ActorComponent::AddForce(const FVector& force, ESpaceType space)
 {
-	//TODO:
+	if (rigidBody) 
+	{
+		rigidBody->AddForce(SpaceToWorld(force, space));
+	}
 }
 
-void ActorComponent::AddTorque(const FVector& torue, ESpaceType space)
+void ActorComponent::AddTorque(const FVector& torque, ESpaceType space)
 {
-	//TODO:
+	if (rigidBody) 
+	{
+		rigidBody->AddTorque(SpaceToWorld(torque, space));
+	}
 }
 
-void ActorComponent::SetComponentTransform(FTransform newTransform)
+void ActorComponent::AddImpulce(const FVector& impulce, ESpaceType space)
+{
+	if (rigidBody) 
+	{
+		rigidBody->AddImpulce(SpaceToWorld(impulce, space));
+	}
+}
+
+void ActorComponent::AddKineticMomement(const FVector& moment, ESpaceType space)
+{
+	if (rigidBody) 
+	{
+		rigidBody->AddKineticMomement(SpaceToWorld(moment, space));
+	}
+}
+
+void ActorComponent::SetComponentTransform(FTransform newTransform, bool bExcludePhysics, bool bUpdateBody)
 {
 	worldTransform = newTransform;
-	UpdateRelativeTransform();
+	UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::SetRelativeTransform(FTransform newTransform)
+void ActorComponent::SetRelativeTransform(FTransform newTransform, bool bExcludePhysics, bool bUpdateBody)
 {
 	relativeTarnsform = newTransform;
-	UpdateWoldTransform();
+	UpdateWoldTransform(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::SetComponentLocation(FVector newLocation)
+void ActorComponent::SetComponentLocation(FVector newLocation, bool bExcludePhysics, bool bUpdateBody)
 {
 	worldTransform.Location = newLocation;
-	UpdateRelativeTransform();
+	UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::SetRelativeLocation(FVector newLocation)
+void ActorComponent::SetRelativeLocation(FVector newLocation, bool bExcludePhysics, bool bUpdateBody)
 {
 	relativeTarnsform.Location = newLocation;
-	UpdateWoldTransform();
+	UpdateWoldTransform(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::SetComponentRotation(FQuat newRotation)
+void ActorComponent::SetComponentRotation(FQuat newRotation, bool bExcludePhysics, bool bUpdateBody)
 {
 	worldTransform.Rotation = newRotation;
-	UpdateRelativeTransform();
+	UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::SetRelativeRotation(FQuat newRotation)
+void ActorComponent::SetRelativeRotation(FQuat newRotation, bool bExcludePhysics, bool bUpdateBody)
 {
 	relativeTarnsform.Rotation = newRotation;
-	UpdateWoldTransform();
+	UpdateWoldTransform(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::AddTransform(FTransform delta, ESpaceType space)
+void ActorComponent::AddTransform(FTransform delta, ESpaceType space, bool bExcludePhysics, bool bUpdateBody)
 {	
 	if (space == ESpaceType::eLocal)
 	{
 		relativeTarnsform += delta;
-		UpdateWoldTransform();
+		UpdateWoldTransform(bExcludePhysics, bUpdateBody);
 		return;
 	}
 	if (space == ESpaceType::eWorld)
 	{
 		worldTransform += delta;
-		UpdateRelativeTransform();
+		UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
 		return;
 	}
 	if (space == ESpaceType::eParent)
 	{
 		relativeTarnsform = delta * relativeTarnsform;
-		UpdateWoldTransform();
+		UpdateWoldTransform(bExcludePhysics, bUpdateBody);
 		return;
 	}
 	assert(false); //TODO: log
 }
 
-void ActorComponent::AddComponentLocation(FVector delta, ESpaceType space)
+void ActorComponent::AddComponentLocation(FVector delta, ESpaceType space, bool bExcludePhysics, bool bUpdateBody)
 {
-	AddTransform(FTransform(delta), space);
+	AddTransform(FTransform(delta), space, bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::AddComponentRotation(FQuat delta, ESpaceType space)
+void ActorComponent::AddComponentRotation(FQuat delta, ESpaceType space, bool bExcludePhysics, bool bUpdateBody)
 {
-	AddTransform(FTransform(delta), space);
+	AddTransform(FTransform(delta), space, bExcludePhysics, bUpdateBody);
 }
 
 const PlayerController* ActorComponent::GetPlayerController() const
@@ -136,6 +159,15 @@ void ActorComponent::Detach()
 	}
 }
 
+bool ActorComponent::IsDynamic() const
+{
+	if (rigidBody)
+	{
+		return rigidBody->IsDinamic();
+	}
+	return false;
+}
+
 std::vector<ActorComponent*>& ActorComponent::GetSubcomponents()
 {
 	return subcomponents;
@@ -150,6 +182,28 @@ const std::vector<ActorComponent*>& ActorComponent::GetSubcomponents() const
 	// std::vector<const ActorComponent*> components;
 	// Internal_GetSubcomponents(components);
 	// return components;
+}
+
+FVector ActorComponent::SpaceToWorld(const FVector& v, ESpaceType space) const
+{
+	switch (space) {
+	case eParent:   return ~GetParentTransform() * v;
+	case eLocal:    return ~worldTransform * v;
+	case eWorld:    return v;
+	default: 
+		assert(false); //TODO:: log
+	}
+}
+
+FQuat ActorComponent::SpaceToWorld(const FQuat& v, ESpaceType space) const
+{
+	switch (space) {
+	case eParent:   return ~GetParentTransform() * v;
+	case eLocal:    return ~worldTransform * v;
+	case eWorld:    return v;
+	default: 
+		assert(false); //TODO:: log
+	}
 }
 
 void ActorComponent::Internal_GetSubcomponents(std::vector<ActorComponent*>& components)
@@ -186,31 +240,43 @@ void ActorComponent::UpdateFacade()
 	}
 }
 
-void ActorComponent::UpdateWoldTransform()
+void ActorComponent::UpdateBody()
+{
+	if (rigidBody)
+	{
+		rigidBody->Update();
+	}
+}
+
+void ActorComponent::UpdateWoldTransform(bool bExcludePhysics, bool bUpdateBody)
 {
 	FTransform P = GetParentTransform();
 	FTransform R = GetRelativeTransform();
 	worldTransform = P * R;
-	UpdateChainTransforms();
+	UpdateChainTransforms(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::UpdateRelativeTransform()
+void ActorComponent::UpdateRelativeTransform(bool bExcludePhysics, bool bUpdateBody)
 {
 	FTransform P = GetParentTransform();
 	FTransform W = GetComponentTransform();
 	relativeTarnsform = ~P * W;
-	UpdateChainTransforms();
+	UpdateChainTransforms(bExcludePhysics, bUpdateBody);
 }
 
-void ActorComponent::UpdateChainTransforms()
-{
+void ActorComponent::UpdateChainTransforms(bool bExcludePhysics, bool bUpdateBody)
+{	
+	if (bUpdateBody)
+	{
+		UpdateBody();
+	}
 	UpdateFacade();
 	
 	for (auto child : subcomponents)
 	{
-		if (IsValid(child))
+		if (IsValid(child) && !(bExcludePhysics && child->IsDynamic()))
 		{
-			child->UpdateWoldTransform();
+			child->UpdateWoldTransform(bExcludePhysics, true);
 		}
 	}
 }

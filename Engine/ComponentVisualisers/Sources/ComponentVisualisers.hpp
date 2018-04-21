@@ -1,5 +1,6 @@
 #ifndef COMPONENT_VISUALISERS_HPP
 #define COMPONENT_VISUALISERS_HPP
+#pragma once
 
 #include <string>
 #include <unordered_map>

@@ -1,9 +1,12 @@
-#include "IViewer.hpp"
-#include "IViewer.hpp"
-#include "../PlayerController.hpp"
+#include "Viewer.hpp"
+#include "PlayerController.hpp"
 
 
-World* IViewer::GetWorld()
+FViewer::FViewer(PlayerController* controller)
+	: IViewer(controller)
+{}
+
+World* FViewer::GetWorld()
 {
 	if (controller)
 	{
@@ -12,7 +15,7 @@ World* IViewer::GetWorld()
 	return nullptr;
 }
 
-CameraComponent* IViewer::GetActiveCamera()
+CameraComponent* FViewer::GetActiveCamera()
 {
 	if (controller)
 	{
@@ -21,7 +24,7 @@ CameraComponent* IViewer::GetActiveCamera()
 	return nullptr;
 }
 
-EventCollector* IViewer::GetEventCollector()
+EventCollector* FViewer::GetEventCollector()
 {
 	if (controller)
 	{
@@ -30,7 +33,7 @@ EventCollector* IViewer::GetEventCollector()
 	return nullptr;
 }
 
-CameraManager* IViewer::GetCameraManager()
+CameraManager* FViewer::GetCameraManager()
 {
 	if (controller)
 	{
@@ -38,4 +41,3 @@ CameraManager* IViewer::GetCameraManager()
 	}
 	return nullptr;
 }
-

@@ -1,5 +1,6 @@
 #ifndef QUAT_HPP
 #define QUAT_HPP
+#pragma once
 
 #include "Vector.hpp"
 #include "Constants.hpp"

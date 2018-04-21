@@ -1,12 +1,13 @@
 #ifndef OSG_CONFIG_HPP
 #define OSG_CONFIG_HPP
+#pragma once
 
 #include "Configs/FrontendConfig.hpp"
 #include "OSGConfig.hpp"
 #include "OSGViewer.hpp"
 
 
-struct OSGConfig : public FFrontendConfig
+struct OSGConfig : public IFrontendConfig
 {
 	virtual IFacade* MakeFacade(ActorComponent* owner) 
 	{ 

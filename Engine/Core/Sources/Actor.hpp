@@ -22,8 +22,10 @@ public:
 
 public: //~~~~~~~~~~~~~~| Physics -> to root component
 
-	void AddForce (const FVector& force, ESpaceType space);
-	void AddTorque(const FVector& torue, ESpaceType space);
+	void AddForce          (const FVector& force,   ESpaceType space);
+	void AddTorque         (const FVector& torque,  ESpaceType space);
+	void AddImpulce        (const FVector& impulce, ESpaceType space);
+	void AddKineticMomement(const FVector& moment,  ESpaceType space);
 
 public: //~~~~~~~~~~~~~~| Kinematic -> to root component
 

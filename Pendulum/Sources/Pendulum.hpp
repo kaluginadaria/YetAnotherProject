@@ -19,18 +19,26 @@ public:
 	{
 		base = CreateSubComponent<BoxColision>("Base");
 		base->SetExtends(FVector(0.6f, 0.6f, 0.6f));
+		base->GetRigidBody()->SetMass(0);
+
+		floor = CreateSubComponent<BoxColision>("floor");
+		floor->AddComponentLocation(FVector(0,0,-7));
+		floor->SetExtends(FVector(5,5,0.1f));
+		floor->GetRigidBody()->SetMass(0);
 		
 		pendulum = CreateSubComponent<BoxColision>("Pendulum");
-		pendulum->AddComponentLocation(FVector(2, 0, 0), eParent);
+		pendulum->AddComponentLocation(FVector(3, 0, 0), eParent);
 		pendulum->SetExtends(FVector(2, 0.2f, 0.2f));
+		pendulum->GetRigidBody()->SetMass(10);
 		
 		target = CreateSubComponent<BoxColision>("Target");
 		target->AddComponentLocation(FVector(5, 0 , 0), eParent);
 		target->AddComponentRotation(FQuat(0 ,90, 0), eParent);
 		target->SetExtends(FVector(0.5f, 0.1f, 0.1f));
-
+		target->GetRigidBody()->SetMass(1);
+		
 		cam = CreateSubComponent<CameraComponent>("Camera");
-		cam->AddComponentLocation(FVector(-30, 0, 0), eParent);
+		cam->AddComponentLocation(FVector(-40, 0, 0), eParent);
 		cam->AddComponentRotation(FQuat( 0, 0 ,90), eParent);
 		cam->SetAutoregister(true);
 	}
@@ -38,8 +46,8 @@ public:
 	virtual void Tick(float DeltaTime, ETickType type)
 	{
 		dt = DeltaTime;
-
-		if (!DeltaTime) return;
+		
+		/* if (!DeltaTime) return;
 
 		auto tr = target  ->GetComponentRotation();
 		auto cr = pendulum->GetComponentRotation();
@@ -53,7 +61,7 @@ public:
 		const float dw = RAD2DEG(M / inertia * dt);
 		w += dw;
 		
-		pendulum->AddComponentRotation(FQuat(0, w * dt, 0), eParent);
+		pendulum->AddComponentRotation(FQuat(0, w * dt, 0), eParent); */
 	}
 
 	virtual void SetupInput(EventBinder* binder)
@@ -89,7 +97,8 @@ protected:
 		if (value && target)
 		{
 			float delta = 40 * value * dt;
-			target->AddComponentRotation(FQuat(0, delta, 0), eParent);
+			target->AddComponentRotation(FQuat(0,    delta, 0), eParent);
+			target->AddComponentRotation(FQuat(0, -2*delta, 0), eParent);
 		}
 	}
 
@@ -99,6 +108,7 @@ protected:
 protected:
 
 	BoxColision* base		= nullptr;
+	BoxColision* floor		= nullptr;
 	BoxColision* pendulum	= nullptr;
 	BoxColision* target		= nullptr;
 	CameraComponent* cam	= nullptr;

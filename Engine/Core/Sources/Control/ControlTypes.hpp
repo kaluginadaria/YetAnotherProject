@@ -1,5 +1,6 @@
 #ifndef CONTROL_TYPES_HPP
 #define CONTROL_TYPES_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -124,11 +125,11 @@ public:
 template<>
 struct std::hash<ControlKey>
 {
-	size_t operator()(const ControlKey& key) const //TODO: WIN32
+	size_t operator()(const ControlKey& key) const
 	{
-		return ((size_t)key.key		<< 0 )
-			|  ((size_t)key.modifier<< 32)
-			|  ((size_t)key.action	<< 48);
+		return ((size_t)key.key		<< 0 )  // [   0   , 2e+16 )	max_value = 65'536
+		    |  ((size_t)key.modifier<< 16)  // [ 2e+16 , 2e+24 )	max_value = 256
+		    |  ((size_t)key.action	<< 24); // [ 2e+24 , 2e+32 )	max_value = 256
 	}
 };
 

@@ -2,10 +2,5 @@
 
 
 BoxColision::BoxColision()
-	: extends(1, 1, 1)
+	: Super(EShapeType::eBox)
 {}
-
-void BoxColision::SetExtends(FVector newExtends)
-{
-	extends = newExtends;
-}

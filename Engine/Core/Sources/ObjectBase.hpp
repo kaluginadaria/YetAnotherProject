@@ -1,20 +1,13 @@
 #pragma once
 
 #include <string>
-
-#include "Misc.hpp"
-#include "Types.hpp"
-
+#include "Common.hpp"
 #include "ObjectCreator.hpp"
 
 class World;
 
-
-
 class ObjectBase
 {
-	friend class ObjectCreator;
-
 public:
 
 	ObjectBase();

@@ -1,0 +1,10 @@
+find_package(Bullet	REQUIRED)
+
+DEFINE_UNIT(Bullet)
+SET(PUBLIC_INCLUDES  ${BULLET_INCLUDE_DIRS})
+SET(PUBLIC_LIBRARIES ${BULLET_LIBRARIES}   )
+SET(CODE        "Sources"	)
+SET(TEST        "Tests" 	)
+SET(CATEGORY    "Engine/Modules"	)
+SET(MODULES      Misc Core )
+MAKE_MODULE()

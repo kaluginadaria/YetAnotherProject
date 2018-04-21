@@ -1,14 +1,13 @@
+#ifndef WORLD_HPP
+#define WORLD_HPP
 #pragma once
 
 #include <array>
-#include <memory>
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Types.hpp"
-#include "Misc.hpp"
 #include "ObjectBase.hpp"
-
+#include "Interfaces/IPhysicsScene.hpp"
 #include "Threading/Initialiser.hpp"
 
 
@@ -40,22 +39,25 @@ public: //~~~~~~~~~~~~~~| Tick
 public: //~~~~~~~~~~~~~~| Construction
 
 	template<class _T>
-	_T* CreateObject()
+	_T* CreateObject() //TODO:: make a review
 	{
+		// make the name unique
 		auto* initialiser = ThreadContext::TopInitialiser();
 		assert(initialiser);
 		auto* name = initialiser->name;
 		assert(name);
 		UpdateNameToUnique(*name);
 
+		// create a new uid
 		OUID newOUID = lastOUID++;
-		ThreadContext::TopInitialiser()->ouid = newOUID;
+		initialiser->ouid = newOUID;
 
+		// create a new object
 		auto base = UNIQUE(ObjectBase)(new _T);
 
 		auto* pointer_base = base.get();
 		auto* pointer = static_cast<_T*>(pointer_base);
-
+		
 		objects.emplace(newOUID, std::move(base));
 		objects_set.emplace(pointer);
 
@@ -77,8 +79,11 @@ public:
 
 public: //~~~~~~~~~~~~~~| 
 
-	const ActorComponent* GetSceneRoot() const	{ return sceneRoot; }
 		  ActorComponent* GetSceneRoot()		{ return sceneRoot; }
+	const ActorComponent* GetSceneRoot() const	{ return sceneRoot; }
+
+	      IPhysicsScene* GetPhysicsScene()       { return scene.get(); }
+	const IPhysicsScene* GetPhysicsScene() const { return scene.get(); }
 
 protected:
 
@@ -90,21 +95,21 @@ protected:
 	ESimulationState SimulationState;
 	/// << 
 
-	/// >> physics
-	
-	/// << 
-
-	/// >> graphic
-	ActorComponent* sceneRoot;
+	/// >> scene
+	ActorComponent*   sceneRoot;
+	UNIQUE(IPhysicsScene) scene;
 	/// <<
 
 	/// >> indices
-	std::unordered_set<Object*> objects_set;
+	OUID lastOUID;
+	
+	std::unordered_set<Object*>      objects_set;
 	std::unordered_map<std::string, Index> names;
 
-	OUID lastOUID;
-
-	std::unordered_map<OUID, UNIQUE(ObjectBase), std::hash<size_t>> objects;
+	std::unordered_map< OUID
+		, UNIQUE(ObjectBase)
+		, std::hash<size_t>
+	> objects;
 	/// <<
 
 	/// >> tick functions
@@ -145,3 +150,5 @@ public: //~~~~~~~~~~~~~~| Iteration
 	SceneIterator begin() { return SceneIterator(sceneRoot); }
 	SceneIterator end()   { return SceneIterator(nullptr);   }
 };
+
+#endif //!WORLD_HPP
