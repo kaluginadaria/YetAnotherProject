@@ -69,6 +69,24 @@ void RigidBody::Sync()
 	}
 }
 
+bool RigidBody::IsValid() const
+{
+	return collision 
+		&& motionState 
+		&& rigidBody;
+}
+
+btTransform RigidBody::GetTransform() const
+{
+	if (owner)
+	{
+		FTransform transform = owner->GetComponentTransform();
+		btTransform newTransform = btTransform() << transform;
+		return newTransform;
+	}
+	return btTransform();
+}
+
 void RigidBody::AddForce(const FVector& force)
 {
 	if (rigidBody && motionState)

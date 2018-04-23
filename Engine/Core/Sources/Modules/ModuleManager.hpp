@@ -16,7 +16,8 @@ public:
 
 	static void SetPhysicsConfig(IPhysicsConfig* conf);
 	static IPhysicsScene* MakeScene();
-	static IRigidBody*    MakeBody(FShape shape, ActorComponent* owner, float mass = 0, FVector inertia = FVector::ZeroVector);
+	static IConstraint* MakeConstraint(ActorComponent* owner);
+	static IRigidBody* MakeBody(FShape shape, ActorComponent* owner, float mass = 0, FVector inertia = FVector::ZeroVector);
 
 private:
 

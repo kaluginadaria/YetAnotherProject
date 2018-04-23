@@ -16,6 +16,9 @@ public:
 	virtual void Update() override;
 	virtual void Sync()   override;
 
+	bool IsValid() const;
+	btTransform GetTransform() const;
+
 public:
 	virtual void AddForce          (const FVector& force  ) override;
 	virtual void AddTorque         (const FVector& torque ) override;

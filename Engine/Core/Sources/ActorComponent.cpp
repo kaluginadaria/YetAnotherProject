@@ -50,36 +50,42 @@ void ActorComponent::SetComponentTransform(FTransform newTransform, bool bExclud
 {
 	worldTransform = newTransform;
 	UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
+	onComponentMoved(bUpdateBody);
 }
 
 void ActorComponent::SetRelativeTransform(FTransform newTransform, bool bExcludePhysics, bool bUpdateBody)
 {
 	relativeTarnsform = newTransform;
 	UpdateWoldTransform(bExcludePhysics, bUpdateBody);
+	onComponentMoved(bUpdateBody);
 }
 
 void ActorComponent::SetComponentLocation(FVector newLocation, bool bExcludePhysics, bool bUpdateBody)
 {
 	worldTransform.Location = newLocation;
 	UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
+	onComponentMoved(bUpdateBody);
 }
 
 void ActorComponent::SetRelativeLocation(FVector newLocation, bool bExcludePhysics, bool bUpdateBody)
 {
 	relativeTarnsform.Location = newLocation;
 	UpdateWoldTransform(bExcludePhysics, bUpdateBody);
+	onComponentMoved(bUpdateBody);
 }
 
 void ActorComponent::SetComponentRotation(FQuat newRotation, bool bExcludePhysics, bool bUpdateBody)
 {
 	worldTransform.Rotation = newRotation;
 	UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
+	onComponentMoved(bUpdateBody);
 }
 
 void ActorComponent::SetRelativeRotation(FQuat newRotation, bool bExcludePhysics, bool bUpdateBody)
 {
 	relativeTarnsform.Rotation = newRotation;
 	UpdateWoldTransform(bExcludePhysics, bUpdateBody);
+	onComponentMoved(bUpdateBody);
 }
 
 void ActorComponent::AddTransform(FTransform delta, ESpaceType space, bool bExcludePhysics, bool bUpdateBody)
@@ -88,18 +94,21 @@ void ActorComponent::AddTransform(FTransform delta, ESpaceType space, bool bExcl
 	{
 		relativeTarnsform += delta;
 		UpdateWoldTransform(bExcludePhysics, bUpdateBody);
+		onComponentMoved(bUpdateBody);
 		return;
 	}
 	if (space == ESpaceType::eWorld)
 	{
 		worldTransform += delta;
 		UpdateRelativeTransform(bExcludePhysics, bUpdateBody);
+		onComponentMoved(bUpdateBody);
 		return;
 	}
 	if (space == ESpaceType::eParent)
 	{
 		relativeTarnsform = delta * relativeTarnsform;
 		UpdateWoldTransform(bExcludePhysics, bUpdateBody);
+		onComponentMoved(bUpdateBody);
 		return;
 	}
 	assert(false); //TODO: log
@@ -129,33 +138,38 @@ PlayerController* ActorComponent::GetPlayerController()
 
 void ActorComponent::AttachTo(ActorComponent* newParent)
 {
-	if (!world) return;
+	if (world) 
+	{
+		Detach();
+		
+		if (!newParent) 
+		{
+			newParent = world->GetSceneRoot();
+		}
+		parent = newParent;
+		parent->AddSubcomponent(this);
+		UpdateWoldTransform(false,true);
+		OnComponentAttached(newParent);
 
-	if (!newParent) {
-		newParent = world->GetSceneRoot();
+		if (facade)
+		{
+			facade->AttachTo(newParent->GetFacade());
+		}
 	}
-	Detach();
-
-	parent = newParent;
-	parent->subcomponents.emplace_back(this);
-
-	facade->AttachTo(newParent->GetFacade());
 }
 
 void ActorComponent::Detach()
 {
 	if (parent && world)
 	{
-		auto bgn = parent->subcomponents.begin();
-		auto end = parent->subcomponents.end();
-		auto pos = std::find(bgn, end, this);
-		if (pos != end)
-		{
-			parent->subcomponents.erase(pos);
-		}
-		parent = world->GetSceneRoot();
+		auto* lastParent = parent;
 
+		parent->RemoveSubcomponent(this);
+		parent = world->GetSceneRoot();
 		facade->Detach();
+
+		UpdateRelativeTransform(false,true);
+		OnComponentDetached(lastParent);
 	}
 }
 
@@ -203,6 +217,30 @@ FQuat ActorComponent::SpaceToWorld(const FQuat& v, ESpaceType space) const
 	case eWorld:    return v;
 	default: 
 		assert(false); //TODO:: log
+	}
+}
+
+void ActorComponent::AddSubcomponent(ActorComponent* child)
+{
+	if (child)
+	{
+		subcomponents.emplace_back(child);
+		OnSubcomponentAttached(child);
+	}
+}
+
+void ActorComponent::RemoveSubcomponent(ActorComponent* child)
+{
+	if (child)
+	{
+		auto bgn = subcomponents.begin();
+		auto end = subcomponents.end();
+		auto pos = std::find(bgn, end, this);
+		if (pos != end)
+		{
+			subcomponents.erase(pos);
+			OnSubcomponentDetached(child);
+		}
 	}
 }
 
@@ -285,3 +323,12 @@ FTransform ActorComponent::GetParentTransform() const
 {
 	return parent ? parent->GetComponentTransform() : FTransform::Identity;
 }
+
+void ActorComponent::onComponentMoved(bool bUpdateBody)
+{
+	if (parent)
+	{
+		parent->onSubcomponentMoved(this, bUpdateBody);
+	}
+}
+

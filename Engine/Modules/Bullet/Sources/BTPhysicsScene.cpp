@@ -18,7 +18,7 @@ PhysicsScene::PhysicsScene()
 		constreintSolver    .get(), 
 		collisionConfiguration.get()
 		);
-	dynamicsWorld->setGravity(btVector3(0, 0, -10));
+	dynamicsWorld->setGravity(btVector3(0, 0, -30));
 }
 
 PhysicsScene::~PhysicsScene()
@@ -71,6 +71,16 @@ void PhysicsScene::UnregisterBody(IRigidBody* ibody)
 	}
 }
 
+void PhysicsScene::RegisterConstraint(IConstraint * constraint)
+{
+
+}
+
+void PhysicsScene::UnregisterConstraint(IConstraint * constraint)
+{
+
+}
+
 void PhysicsScene::SyncBody(RigidBody* body)
 {
 	if (body && body->rigidBody)
@@ -87,5 +97,21 @@ void PhysicsScene::SyncBody(RigidBody* body)
 		}
 
 		dynamicsWorld->addRigidBody(rigidBody);
+	}
+}
+
+void PhysicsScene::SetConstraint(btPoint2PointConstraint* constraint)
+{
+	if (dynamicsWorld && constraint)
+	{
+		dynamicsWorld->addConstraint(constraint);
+	}
+}
+
+void PhysicsScene::RemoveConstraint(btPoint2PointConstraint* constraint)
+{
+	if (dynamicsWorld && constraint)
+	{
+		dynamicsWorld->removeConstraint(constraint);
 	}
 }

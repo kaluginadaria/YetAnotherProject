@@ -49,6 +49,15 @@ IPhysicsScene* ModuleManager::MakeScene()
 	return nullptr;
 }
 
+IConstraint* ModuleManager::MakeConstraint(ActorComponent* owner)
+{
+	if (physics)
+	{
+		return physics->MakeConstraint(owner);
+	}
+	return nullptr;
+}
+
 IRigidBody* ModuleManager::MakeBody(FShape shape, ActorComponent* owner, float mass, FVector inertia)
 {
 	if (physics)

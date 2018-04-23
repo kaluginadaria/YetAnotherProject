@@ -3,15 +3,31 @@
 #define CONSTRAINT_HPP
 
 #include "../IConstraint.hpp"
+#include "ActorComponent.hpp"
 
 
 struct FConstraint : public IConstraint
 {
-	FConstraint(FConstraintType type);
+	FConstraint(ActorComponent* owner);
 
 	virtual FConstraintType GetConstraints() const override;
 
 protected:
+
+	template<class _ST> 
+	_ST* GetPhysicsScene()
+	{
+		if (auto* world = GetWorld())
+		{
+			return dynamic_cast<_ST*>(world->GetPhysicsScene());
+		}
+		return nullptr;
+	}
+
+	World* GetWorld();
+
+protected:
+	ActorComponent* owner;
 	FConstraintType constraint;
 };
 

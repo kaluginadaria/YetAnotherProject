@@ -120,6 +120,9 @@ protected:
 	* @param bUpdateBody     - if true - update a rigid body with
 	*/
 
+	void AddSubcomponent   (ActorComponent* child);
+	void RemoveSubcomponent(ActorComponent* child);
+
 	void Internal_GetSubcomponents(std::vector<		 ActorComponent*>& components);
 	void Internal_GetSubcomponents(std::vector<const ActorComponent*>& components) const;
 
@@ -131,6 +134,15 @@ protected:
 	void UpdateChainTransforms  (bool bExcludePhysics, bool bUpdateBody);
 
 	FTransform GetParentTransform() const;
+
+protected:
+
+	virtual void OnSubcomponentAttached(ActorComponent* child ) {}
+	virtual void OnSubcomponentDetached(ActorComponent* child ) {}
+	virtual void OnComponentAttached   (ActorComponent* parent) {}
+	virtual void OnComponentDetached   (ActorComponent* parent) {}
+	virtual void onSubcomponentMoved   (ActorComponent* child, bool bUpdateBody) {}
+	virtual void onComponentMoved      (bool bUpdateBody);   
 
 protected:
 

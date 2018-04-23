@@ -16,12 +16,16 @@ public:
 	~PhysicsScene();
 
 public:
-	virtual void Update(float deltaTime);
-	virtual void RegisterBody  (IRigidBody* ibody);
-	virtual void UnregisterBody(IRigidBody* ibody);
+	virtual void Update(float deltaTime) override;
+	virtual void RegisterBody  (IRigidBody* ibody) override;
+	virtual void UnregisterBody(IRigidBody* ibody) override;
+	virtual void RegisterConstraint  (IConstraint* constraint) override;
+	virtual void UnregisterConstraint(IConstraint* constraint) override;
 
 public:
 	void SyncBody(struct RigidBody* body);
+	void SetConstraint   (btPoint2PointConstraint* constraint);
+	void RemoveConstraint(btPoint2PointConstraint* constraint);
 
 protected:
 	UNIQUE(btDefaultCollisionConfiguration)		collisionConfiguration;

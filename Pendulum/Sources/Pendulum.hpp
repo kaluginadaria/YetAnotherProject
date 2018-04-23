@@ -2,6 +2,7 @@
 
 #include "Avatar.hpp"
 #include "BoxColision.hpp"
+#include "JontComponent.hpp"
 #include "CameraComponent.hpp"
 #include "Control/EventBinder.hpp"
 #include "PID.hpp"
@@ -15,7 +16,7 @@ class Pendulum : public Avatar
 public:
 
 	Pendulum()
-		: pid(4, 0, 20)
+		: pid(4, 0.1f, 20)
 	{
 		base = CreateSubComponent<BoxColision>("Base");
 		base->SetExtends(FVector(0.6f, 0.6f, 0.6f));
@@ -25,17 +26,23 @@ public:
 		floor->AddComponentLocation(FVector(0,0,-7));
 		floor->SetExtends(FVector(5,5,0.1f));
 		floor->GetRigidBody()->SetMass(0);
+
+		joint = CreateSubComponent<JointComponent>("joint");
+		joint->SetConstraint(FConstraintType::MakeRotation(ePitch));
+		joint->AttachTo(base);
 		
 		pendulum = CreateSubComponent<BoxColision>("Pendulum");
 		pendulum->AddComponentLocation(FVector(3, 0, 0), eParent);
-		pendulum->SetExtends(FVector(2, 0.2f, 0.2f));
+		pendulum->SetExtends(FVector(1.5f, 0.2f, 0.2f));
 		pendulum->GetRigidBody()->SetMass(10);
+		pendulum->AttachTo(joint);
 		
 		target = CreateSubComponent<BoxColision>("Target");
-		target->AddComponentLocation(FVector(5, 0 , 0), eParent);
+		target->AddComponentLocation(FVector(6, 0 , 0), eParent);
 		target->AddComponentRotation(FQuat(0 ,90, 0), eParent);
 		target->SetExtends(FVector(0.5f, 0.1f, 0.1f));
-		target->GetRigidBody()->SetMass(1);
+		target->GetRigidBody()->SetMass(0);
+		target->AttachTo(joint);
 		
 		cam = CreateSubComponent<CameraComponent>("Camera");
 		cam->AddComponentLocation(FVector(-40, 0, 0), eParent);
@@ -45,23 +52,22 @@ public:
 
 	virtual void Tick(float DeltaTime, ETickType type)
 	{
-		dt = DeltaTime;
-		
-		/* if (!DeltaTime) return;
+		Super::Tick(DeltaTime, type);
 
-		auto tr = target  ->GetComponentRotation();
-		auto cr = pendulum->GetComponentRotation();
-		auto delta = ~cr * tr;
+		dt = DeltaTime;
+		// if (!DeltaTime) return;
+
+		// auto tr = target  ->GetComponentRotation();
+		// auto cr = pendulum->GetComponentRotation();
+		// auto delta = ~cr * tr;
+		// 
+		// const float control = pid.GetValue(delta.Y, dt);
+		// const float inertia = 600;
+		// const float M0      = 100;
+		// const float M = M0 * control;
+		// std::cout << M << std::endl;
 		
-		const float control = pid.GetValue(delta.Y, dt);
-		const float inertia = 600;
-		const float M0      = 100;
-		
-		const float M  = M0 * control;
-		const float dw = RAD2DEG(M / inertia * dt);
-		w += dw;
-		
-		pendulum->AddComponentRotation(FQuat(0, w * dt, 0), eParent); */
+		// pendulum->AddTorque(FVector(0, M, 0), eParent);
 	}
 
 	virtual void SetupInput(EventBinder* binder)
@@ -107,11 +113,12 @@ protected:
 
 protected:
 
-	BoxColision* base		= nullptr;
-	BoxColision* floor		= nullptr;
-	BoxColision* pendulum	= nullptr;
-	BoxColision* target		= nullptr;
-	CameraComponent* cam	= nullptr;
+	BoxColision*	 base		= nullptr;
+	BoxColision*	 floor		= nullptr;
+	BoxColision*	 pendulum	= nullptr;
+	BoxColision*	 target		= nullptr;
+	JointComponent*	 joint		= nullptr;
+	CameraComponent* cam		= nullptr;
 
 	float dt = 0;
 	float w  = 0;

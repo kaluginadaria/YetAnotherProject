@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <functional>
+#include <array>
 
 #include "Math.hpp"
 
@@ -12,43 +13,43 @@ class Object;
 
 enum ESpaceType
 {
-	eLocal,
-	eWorld,
-	eParent
+	  eLocal
+	, eWorld
+	, eParent
 };
 
 enum EObjectType
 {
-	eObject,
-	eActor,
-	eActorComponent,
-	eActorModule,
-	eGameMode
+	  eObject
+	, eActor
+	, eActorComponent
+	, eActorModule
+	, eGameMode
 };
 
 enum ETickType
 {
-	ePrePhysics,
-	eInPhysics,
-	ePostPhysics,
-	eRender,
-
-	eMAX
+	  ePrePhysics
+	, eInPhysics
+	, ePostPhysics
+	, eRender
+	
+	, eMAX
 };
 
 enum ESimulationState
 {
-	eUnstarted,
-	eInProgress,
-	ePaused,
-	eStopped
+	  eUnstarted
+	, eInProgress
+	, ePaused
+	, eStopped
 };
 
 enum EAttachmentRule
 {
-	eKeepRelative,
-	eSnapToTarget,
-	eKeepWorld
+	  eKeepRelative
+	, eSnapToTarget
+	, eKeepWorld
 };
 
 
@@ -168,124 +169,165 @@ public:
 *								constraint types
 *******************************************************************************/
 
-enum EAngleType
-{
-	ePitch,
-	eRoll,
-	eYaw
-};
-
 enum EAxisType
 {
-	eX,
-	eY,
-	eZ
+	  eX   = 0
+	, eY   = 1
+	, eZ   = 2
+	, AXT_MAX = 3
+};
+
+enum EAngleType
+{
+	  ePitch = 1
+	, eRoll  = 0
+	, eYaw   = 2
+	, AGT_MAX   = 3
 };
 
 
 struct FConstraintType
 {
-public: //~~~~~~~~~~~~~~| rotation
+	struct FAxisConstaint
+	{
+		float min = 0; // minimal value 
+		float max = 0; // maximal value
+		bool  bAcive = true; // is the constraint active
+	};
 
-	int LockYaw   : 1;
-	int LockRoll  : 1;
-	int LockPitch : 1;
+public: //~~~~~~~~~~~~~~| constraints
 
-public: //~~~~~~~~~~~~~~| location
-
-	int LockX : 1;
-	int LockY : 1;
-	int LockZ : 1;
+	std::array<FAxisConstaint, EAngleType::AGT_MAX> rotation;
+	std::array<FAxisConstaint, EAxisType ::AXT_MAX> movement;
 
 public: //~~~~~~~~~~~~~~| constructors
 
-	FConstraintType(bool default)
-		: LockYaw   (default)
-		, LockRoll  (default)
-		, LockPitch (default)
-		, LockX     (default)
-		, LockY     (default)
-		, LockZ     (default)
-	{}
+	FConstraintType() = default;
 
 	// 3 - sphere
 	static FConstraintType MakeSphere()
 	{
-		FConstraintType res(true);
-		res.LockPitch = 0;
-		res.LockRoll  = 0;
-		res.LockYaw   = 0;
+		FConstraintType res;
+		res.RotationConstaraint(ePitch, false);
+		res.RotationConstaraint(eYaw  , false);
+		res.RotationConstaraint(eRoll , false);
 		return res;
 	}
 
 	// 3 - movement
 	static FConstraintType MakeMovement()
 	{
-		FConstraintType res(true);
-		res.LockX = 0;
-		res.LockY = 0;
-		res.LockZ = 0;
+		FConstraintType res;
+		res.MovementConstarint(eX, false);
+		res.MovementConstarint(eY, false);
+		res.MovementConstarint(eZ, false);
 		return res;
 	}
 
 	// 4 - cylinder
 	static FConstraintType MakeCylinder(EAxisType axis)
 	{
-		FConstraintType res(true);
-		res.SetRotationMovement(axis, false);
+		FConstraintType res;
+		EAngleType angle = (EAngleType)axis;
+		res.MovementConstarint (axis , false);
+		res.RotationConstaraint(angle, false);
 		return res;
 	}
 
-	// 5 - ratation
+	// 5 - rotation
 	static FConstraintType MakeRotation(EAngleType angle)
 	{
-		FConstraintType res(true);
-		res.SetRotation(angle, false);
+		FConstraintType res;
+		res.RotationConstaraint(angle, false);
 		return res;
 	}
 
 	// 5 - axis
 	static FConstraintType MakeAxis(EAxisType axis)
 	{
-		FConstraintType res(true);
-		res.Setmovement(axis, false);
+		FConstraintType res;
+		res.MovementConstarint(axis, false);
 		return res;
 	}
 
 	// 6 - seal
 	static FConstraintType MakeSeal()
 	{
-		return FConstraintType(true);
+		FConstraintType res;
+		res.MovementConstarint(eX, false);
+		res.MovementConstarint(eY, false);
+		res.MovementConstarint(eZ, false);
+
+		res.RotationConstaraint(ePitch, false);
+		res.RotationConstaraint(eYaw  , false);
+		res.RotationConstaraint(eRoll , false);
+		return res;
 	}
 
-private:
+public:
 
-	void SetRotationMovement(EAxisType axis, bool state)
+	void SetRotation(EAngleType angle, float min, float max)
 	{
-		switch (axis) {
-		case eX: LockRoll  = state; LockX = state; break;
-		case eY: LockPitch = state; LockY = state; break;
-		case eZ: LockYaw   = state; LockZ = state; break;
-		}
+		rotation[angle].bAcive = true;
+		rotation[angle].max = max;
+		rotation[angle].min = min;
+	}
+	void RotationConstaraint(EAngleType angle, bool state)
+	{
+		rotation[angle].bAcive = state;
 	}
 
-	void SetRotation(EAngleType angle, bool state)
+	void SetMovement(EAxisType axis, float min, float max)
 	{
-		switch (angle) {
-		case ePitch: LockPitch = state; break;
-		case eRoll:  LockRoll  = state; break;
-		case eYaw:   LockYaw   = state; break;
-		}
+		movement[axis].bAcive = true;
+		movement[axis].max = max;
+		movement[axis].min = min;
+	}
+	void MovementConstarint(EAxisType axis, bool state)
+	{
+		movement[axis].bAcive = state;
 	}
 
-	void Setmovement(EAxisType axis, bool state)
+public:
+
+	FVector GetAngularLower() const
 	{
-		switch (axis)
+		FVector values;
+		for (int i = 0; i < EAngleType::AGT_MAX; ++i)
 		{
-		case eX: LockX = state; break;
-		case eY: LockY = state; break;
-		case eZ: LockZ = state; break;
+			values[i] = rotation[i].min;
 		}
+		return values;
+	}
+
+	FVector GetAngularUpper() const
+	{
+		FVector values;
+		for (int i = 0; i < EAngleType::AGT_MAX; ++i)
+		{
+			values[i] = rotation[i].max;
+		}
+		return values;
+	}
+
+	FVector GetLinearLower() const
+	{
+		FVector values;
+		for (int i = 0; i < EAxisType::AXT_MAX; ++i)
+		{
+			values[i] = movement[i].min;
+		}
+		return values;
+	}
+
+	FVector GetLinearUpper() const
+	{
+		FVector values;
+		for (int i = 0; i < EAxisType::AXT_MAX; ++i)
+		{
+			values[i] = movement[i].max;
+		}
+		return values;
 	}
 };
 
