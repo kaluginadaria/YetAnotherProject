@@ -106,7 +106,7 @@ public:
 			&& action   == r.action;
 	}
 
-	operator bool() const
+	explicit operator bool() const
 	{
 		return key != EInputKey::KEY_NONE;
 	}
@@ -124,11 +124,11 @@ public:
 template<>
 struct std::hash<ControlKey>
 {
-	size_t operator()(const ControlKey& key) const //TODO: WIN32
+	size_t operator()(const ControlKey& key) const
 	{
-		return ((size_t)key.key		<< 0 )
-			|  ((size_t)key.modifier<< 32)
-			|  ((size_t)key.action	<< 48);
+		return ((size_t)key.key		<< 0 ) // [0, 65536) 
+			|  ((size_t)key.modifier<< 16) // [0, 256  ) 
+			|  ((size_t)key.action	<< 24);// [0, 256  ) 
 	}
 };
 
