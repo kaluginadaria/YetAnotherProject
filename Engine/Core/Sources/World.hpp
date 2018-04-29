@@ -43,10 +43,8 @@ public: //~~~~~~~~~~~~~~| Construction
 	{
 		// make the name unique
 		auto* initialiser = ThreadContext::TopInitialiser();
-		assert(initialiser);
-		auto* name = initialiser->name;
-		assert(name);
-		UpdateNameToUnique(*name);
+		assert(initialiser);  auto* name = initialiser->name;
+		assert(name       );  UpdateNameToUnique(*name);
 
 		// create a new uid
 		OUID newOUID = lastOUID++;

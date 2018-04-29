@@ -16,8 +16,8 @@ public:
 	GameMode();
 	
 	virtual void OnConstructed()  {}
-	virtual void OnBeginPlay()	  {}
-	virtual void OnEndPlay()	  {}
+	virtual void OnBeginPlay();
+	virtual void OnEndPlay();
 	virtual void OnStartDestroy() {}
 
 public:

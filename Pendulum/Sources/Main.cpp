@@ -1,5 +1,5 @@
 #include "Engine.hpp"
-#include "BTConfig.hpp"
+#include "B2Config.hpp"
 #include "OSGConfig.hpp"
 #include "Modules/ModuleManager.hpp"
 
@@ -14,7 +14,7 @@ using PDSimulationConfig = TSimulationModeConfig<PDPlayerController, PDGameMode>
 int main()
 {
 	ModuleManager::SetFrontendConfig(new OSGConfig());
-	ModuleManager::SetPhysicsConfig (new BTConfig() );
+	ModuleManager::SetPhysicsConfig (new B2Config() );
 
 	auto* config = new PDSimulationConfig();
 	auto mode = SimulationMode::Get(config);

@@ -6,6 +6,9 @@
 ActorComponent::ActorComponent()
 	: owner(ThreadContext::TopInitialiser()->owner)
 	, parent(nullptr)
+	
+	, OnCollisionEnter(world)
+	, OnCollisionExit (world)
 
 	, relativeTarnsform(FTransform::Identity)
 	, worldTransform   (FTransform::Identity)

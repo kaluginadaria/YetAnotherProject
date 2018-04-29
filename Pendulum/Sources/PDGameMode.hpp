@@ -13,9 +13,6 @@ public:
 
 public:
 	/// >> SimulationMode
-	virtual void OnBeginPlay() override;
-	virtual void OnEndPlay()   override;
-
 	virtual void Tick(float DeltaTime, ETickType type) override;
 	/// <<
 };

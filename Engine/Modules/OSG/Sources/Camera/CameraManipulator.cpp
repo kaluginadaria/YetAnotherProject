@@ -40,7 +40,7 @@ bool CameraManipulator::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActio
 	
 	if (auto* camera = manager.GetCurrentCamera())
 	{
-		const FQuat correction(90, -90, 0);
+		const FQuat correction(0, -90, 0);
 
 		auto worldTransform = camera->GetComponentTransform();
 		auto rotation = worldTransform.Rotation * correction;

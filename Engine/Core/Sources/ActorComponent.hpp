@@ -8,28 +8,28 @@
 #include "Object.hpp"
 #include "Interfaces/IFacade.hpp"
 #include "Interfaces/IRigidBody.hpp"
+#include "Delegation/Delegate.hpp"
 
 class Actor;
-class World;
 class PlayerController;
 struct IRigidBody;
 
-/** All object components in the world makes a backet tree (NODE: Actor is a kind of wrapper on components)
- *	Each Component have:
- *	. realtive transform 
- *	. absolute transform
- *	
- *	. subcomponent	- child nodes probably dependesce from the one
- *	. parent		- a parent node
- *	. owner			- an objects associated with the component
- *	. world			- a world where the component is placed
- */
+
+
 class ActorComponent : public Object
 {
 	GENERATED_BODY(ActorComponent, Object)
 public:
 
 	ActorComponent();
+
+public: //~~~~~~~~~~~~~~| events
+
+	using DL_OnCollisionEnter = Delegate<Actor* /*Other actor*/, ActorComponent* /*other comp*/, FHit>;
+	using DL_OnCollisionExit  = Delegate<Actor* /*Other actor*/, ActorComponent* /*other comp*/>;
+
+	DL_OnCollisionEnter OnCollisionEnter;
+	DL_OnCollisionExit  OnCollisionExit;
 
 public: //~~~~~~~~~~~~~~| Physics
 
@@ -41,7 +41,7 @@ public: //~~~~~~~~~~~~~~| Physics
 public: //~~~~~~~~~~~~~~| Position
 	/** NOTE:
 	 * @param bExcludePhysics - if true child dynamic object won't be updated
-	 * @param bUpdateBody     - if true - update a rigid body with
+	 * @param bUpdateBody     - if true - update a rigid body
 	 */
 
 	/// transform
@@ -117,7 +117,7 @@ public: //~~~~~~~~~~~~~~| Misc
 protected:
 	/** NOTE:
 	* @param bExcludePhysics - if true child dynamic object won't be updated
-	* @param bUpdateBody     - if true - update a rigid body with
+	* @param bUpdateBody     - if true - update a rigid body
 	*/
 
 	void AddSubcomponent   (ActorComponent* child);
