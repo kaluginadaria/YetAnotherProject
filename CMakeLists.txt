@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.0)
 
 project(YetAnotherProject)
 
-#~~~~~~~~~~~~~~~~~~~~~~~| >> setup project | 
+#~~~~~~~~~~~~~~~~~~~~~~~| >> setup project |
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/Cmake" ${CMAKE_MODULE_PATH}) 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 INCLUDE("Cmake/DefaultSetup.cmake")
 INCLUDE("Cmake/MacroUtiles.cmake")
