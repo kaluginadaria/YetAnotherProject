@@ -27,24 +27,24 @@ FColor& FColor::operator=(const FColor& r)
 
 float& FColor::operator[](int i)
 {
-	assert(i >= 0 && i < 4);
 	switch (i) {
 	case 0: return R;
 	case 1: return G;
 	case 2: return B;
 	case 3: return A;
 	}
+	throw std::out_of_range("");
 }
 
 float FColor::operator[](int i) const
 {
-	assert(i >= 0 && i < 4);
 	switch (i) {
 	case 0: return R;
 	case 1: return G;
 	case 2: return B;
 	case 3: return A;
 	}
+	throw std::out_of_range("");
 }
 
 FColor FColor::operator+(const FColor& r) const
@@ -112,6 +112,7 @@ FColor FColor::operator*(float r) const
 
 FColor FColor::operator/(float r) const
 {
+	assert(r); // TODO:: log
 	return FColor(
 		R / r,
 		G / r,
@@ -148,6 +149,7 @@ FColor& FColor::operator*=(float r)
 
 FColor& FColor::operator/=(float r)
 {
+	assert(r); // TODO:: log
 	R /= r;
 	G /= r;
 	B /= r;

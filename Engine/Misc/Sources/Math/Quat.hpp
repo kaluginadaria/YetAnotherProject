@@ -24,8 +24,8 @@ public:
 
 	FQuat& operator=(const FQuat& r);
 
-	float& operator[](int i);
-	float  operator[](int i) const;
+	float& operator[](int idx);
+	float  operator[](int idx) const;
 
 public: //~~~~~~~~~~~~~~| quat - quat
 

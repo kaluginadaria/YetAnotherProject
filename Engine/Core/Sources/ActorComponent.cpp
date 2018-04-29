@@ -114,7 +114,7 @@ void ActorComponent::AddTransform(FTransform delta, ESpaceType space, bool bExcl
 		onComponentMoved(bUpdateBody);
 		return;
 	}
-	assert(false); //TODO: log
+	throw std::out_of_range("Space have unsupported value");
 }
 
 void ActorComponent::AddComponentLocation(FVector delta, ESpaceType space, bool bExcludePhysics, bool bUpdateBody)
@@ -207,9 +207,8 @@ FVector ActorComponent::SpaceToWorld(const FVector& v, ESpaceType space) const
 	case eParent:   return ~GetParentTransform() * v;
 	case eLocal:    return ~worldTransform * v;
 	case eWorld:    return v;
-	default: 
-		assert(false); //TODO:: log
 	}
+	throw std::out_of_range("Space have unsupported value");
 }
 
 FQuat ActorComponent::SpaceToWorld(const FQuat& v, ESpaceType space) const
@@ -218,9 +217,8 @@ FQuat ActorComponent::SpaceToWorld(const FQuat& v, ESpaceType space) const
 	case eParent:   return ~GetParentTransform() * v;
 	case eLocal:    return ~worldTransform * v;
 	case eWorld:    return v;
-	default: 
-		assert(false); //TODO:: log
 	}
+	throw std::out_of_range("Space have unsupported value");
 }
 
 void ActorComponent::AddSubcomponent(ActorComponent* child)
