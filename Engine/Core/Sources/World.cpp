@@ -2,8 +2,6 @@
 #include "Actor.hpp"
 #include "Threading/ThreadPool.hpp"
 
-#include <algorithm>
-
 
 World::World()
 	: SimulationState(eUnstarted)
@@ -84,10 +82,6 @@ void World::UpdateNameToUnique(std::string& name)
 	name += "_" + std::to_string(index);
 }
 
-/*******************************************************************************
-*								Scene Iterator
-*******************************************************************************/
-
 World::SceneIterator::SceneIterator(ActorComponent* root)
 {
 	if (!root) return;
@@ -118,7 +112,7 @@ bool World::SceneIterator::operator==(const SceneIterator& r) const
 	if (size_r != size_l) return false;
 	
 	bool result = true;
-	for (size_t itr = 0; itr < size_l && result; ++itr)
+	for (size_t itr = 0; itr < size_l && result; ++itr) //TODO:: std::for_each
 	{
 		result &= indices._Get_container()[itr] == r.indices._Get_container()[itr];
 		result &= path   ._Get_container()[itr] == r.path   ._Get_container()[itr];

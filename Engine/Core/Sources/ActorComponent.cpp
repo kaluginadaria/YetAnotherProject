@@ -79,7 +79,7 @@ void ActorComponent::AddTransform(FTransform delta, ESpaceType space)
 		UpdateWoldTransform();
 		return;
 	}
-	throw std::out_of_range("Space have unsupported value");
+	assert(false); //TODO: log
 }
 
 void ActorComponent::AddComponentLocation(FVector delta, ESpaceType space)

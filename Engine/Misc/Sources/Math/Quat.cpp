@@ -5,6 +5,8 @@
 const FQuat FQuat::Identity = FQuat(0, 0, 0, 1);
 
 
+
+
 FQuat::FQuat()
 	: X(0) 
 	, Y(0)
@@ -47,24 +49,24 @@ FQuat& FQuat::FQuat::operator=(const FQuat& r)
 
 float& FQuat::FQuat::operator[](int i)
 {
+	assert(i >= 0 && i < 4);
 	switch (i) {
 	case 0: return X;
 	case 1: return Y;
 	case 2: return Z;
 	case 3: return W;
 	}
-	throw std::out_of_range("");
 }
 
 float FQuat::operator[](int i) const
 {
+	assert(i >= 0 && i < 4);
 	switch (i) {
 	case 0: return X;
 	case 1: return Y;
 	case 2: return Z;
 	case 3: return W;
 	}
-	throw std::out_of_range("");
 }
 
 FQuat FQuat::operator+(const FQuat& r) const

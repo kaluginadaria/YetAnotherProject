@@ -1,6 +1,4 @@
 #pragma once
-#ifndef BOX_COLLISION_VISUALISER_HPP
-#define BOX_COLLISION_VISUALISER_HPP
 
 #include "../ComponentVisualiser.hpp"
 #include "BoxColision.hpp"
@@ -17,5 +15,3 @@ class BoxColisionVisualiser : public ComponentVisualiser
 		}
 	}
 };
-
-#endif // !BOX_COLLISION_VISUALISER_HPP
