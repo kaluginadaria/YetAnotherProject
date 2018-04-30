@@ -3,38 +3,38 @@
 Pendulum::Pendulum()
 	: pid(4, 0, 3)
 {
-	base = CreateSubComponent<BoxColision>("Base");
+	base = CreateSubcomponent<BoxColision>("Base");
 	base->SetExtends(FVector(0.6f, 0.6f, 0.6f));
 	base->GetRigidBody()->SetMass(0);
 
-	floor = CreateSubComponent<BoxColision>("floor");
+	floor = CreateSubcomponent<BoxColision>("floor");
 	floor->AddComponentLocation(FVector(0, -8, 0));
 	floor->SetExtends(FVector(5, 0.1f, 5));
 	floor->GetRigidBody()->SetMass(0);
 
-	joint = CreateSubComponent<JointComponent>("joint");
+	joint = CreateSubcomponent<JointComponent>("joint");
 	joint->SetConstraint(FConstraintType::MakeRotation(eYaw));
 	joint->AttachTo(base);
 
-	pendulum = CreateSubComponent<BoxColision>("Pendulum");
+	pendulum = CreateSubcomponent<BoxColision>("Pendulum");
 	pendulum->AddComponentLocation(FVector(2.5f, 0, 0), eParent);
 	pendulum->SetExtends(FVector(1.5f, 0.2f, 0.2f));
 	pendulum->GetRigidBody()->SetMass(10);
 	pendulum->AttachTo(joint);
 
-	target = CreateSubComponent<BoxColision>("Target");
+	target = CreateSubcomponent<BoxColision>("Target");
 	target->AddComponentLocation(FVector(5, 0, 0), eParent);
 	target->AddComponentRotation(FQuat(0, 0, -90), eParent);
 	target->SetExtends(FVector(0.5f, 0.1f, 0.1f));
 	target->GetRigidBody()->SetMass(0);
 	target->AttachTo(joint);
 
-	jumper = CreateSubComponent<BoxColision>("Target");
+	jumper = CreateSubcomponent<BoxColision>("Target");
 	jumper->AddComponentLocation(FVector(-1, -7, 0), eParent);
 	jumper->SetExtends(FVector(0.1f, 0.1f, 0.1f));
 	jumper->GetRigidBody()->SetMass(1);
 
-	cam = CreateSubComponent<CameraComponent>("Camera");
+	cam = CreateSubcomponent<CameraComponent>("Camera");
 	cam->AddComponentLocation(FVector(0, -5, 40), eParent);
 	cam->AddComponentRotation(FQuat(0, 90, 0), eLocal);
 	cam->SetAutoregister(true);

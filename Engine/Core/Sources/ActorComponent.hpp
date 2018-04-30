@@ -38,6 +38,15 @@ public: //~~~~~~~~~~~~~~| Physics
 	void AddImpulce        (const FVector& impulce, ESpaceType space);
 	void AddKineticMomement(const FVector& moment,  ESpaceType space);
 
+	FVector GetVelocity() const;
+	FVector GetOmega()    const;
+
+	float GetMass() const;
+	void SetMass(float newMass);
+
+	FVector GetInertia() const;
+	void SetInertia(FVector newInertia);
+
 public: //~~~~~~~~~~~~~~| Position
 	/** NOTE:
 	 * @param bExcludePhysics - if true child dynamic object won't be updated
@@ -113,6 +122,9 @@ public: //~~~~~~~~~~~~~~| Misc
 
 	FVector SpaceToWorld(const FVector& v, ESpaceType space) const;
 	FQuat   SpaceToWorld(const FQuat&   v, ESpaceType space) const;
+
+	FVector SpaceToLocal(const FVector& v, ESpaceType space) const;
+	FQuat   SpaceToLocal(const FQuat&   v, ESpaceType space) const;
 	
 protected:
 	/** NOTE:

@@ -21,26 +21,26 @@ public: //~~~~~~~~~~~~~~| force / impulce
 	virtual void AddKineticMomement(const FVector& moment ) = 0;
 
 public: //~~~~~~~~~~~~~~| 
-	// mass
-
+	/// owner
+	virtual const ActorComponent* GetOwner() const   = 0;
+	virtual       ActorComponent* GetOwner()         = 0;
+	virtual void  SetOwner(ActorComponent* newOwner) = 0;
+	/// mass
 	virtual float   GetMass    () const             = 0;
 	virtual FVector GetInertia () const             = 0;
 	virtual void    SetMass    (float   newMass   ) = 0;
 	virtual void    SetInertia (FVector newInertia) = 0;
-
-	// extents
-
-	virtual void SetExtents(FVector newExtents) = 0;
-
-	// owner
-
-	virtual const ActorComponent* GetOwner() const  = 0;
-	virtual       ActorComponent* GetOwner()        = 0;
-	virtual void SetOwner(ActorComponent* newOwner) = 0;
-
-	// bDynamic
-
-	virtual bool IsDinamic() const = 0;
+	/// extents
+	virtual void    SetExtents(FVector newExtents) = 0;
+	/// bDynamic
+	virtual bool    IsDinamic() const = 0;
+	
+	/// velocity
+	virtual FVector GetVelocity() const = 0;
+	virtual void    SetVelocity(const FVector& newVelocity) = 0;
+	/// omega
+	virtual FVector GetOmega() const = 0;
+	virtual void    SetOmega(const FVector& newOmega) = 0;
 };
 
 

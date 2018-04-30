@@ -30,6 +30,12 @@ public:
 	
 	virtual void SetExtents(FVector newExtents) override;
 
+	virtual FVector GetVelocity()                     const override;
+	virtual void    SetVelocity(const FVector& newVelocity) override;
+	
+	virtual FVector GetOmega()                  const override;
+	virtual void    SetOmega(const FVector& newOmega) override;
+
 public:
 	b2Transform GetTransform() const;
 	void UpdateState();

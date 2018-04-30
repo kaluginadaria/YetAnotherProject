@@ -73,7 +73,7 @@ struct ITickFunction
 
 /**
  */
-struct TickFunction : public ITickFunction
+struct FTickFunction : public ITickFunction
 {
 	ETickType tickType;
 	Object*	  target;
@@ -90,7 +90,7 @@ public:
 public:
 	
 	template<class _Fx, class _T>
-	void BindFunction(_Fx func, _T* newTarget)
+	void BindFunction(_T* newTarget, _Fx func)
 	{
 		target = newTarget;
 		function = std::function<void(float, ETickType)>(std::bind(

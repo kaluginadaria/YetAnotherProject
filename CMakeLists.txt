@@ -12,7 +12,7 @@ SET(3rdParty "${CMAKE_SOURCE_DIR}/3rdParty")
 SetupEvniroment()
 	
 #~~~~~~~~~~~~~~~~~~~~~~~| >> init project |
-INIT_PROJECT(Engine Pendulum)
+INIT_PROJECT(Engine Game)
 
 #~~~~~~~~~~~~~~~~~~~~~~~| >> make test module
 #MAKE_MODULE(PendulumEngine)

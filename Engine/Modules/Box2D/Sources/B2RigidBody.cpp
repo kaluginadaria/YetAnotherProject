@@ -61,8 +61,9 @@ void RigidBody::Sync()
 
 void RigidBody::AddForce(const FVector& force)
 {
-	if (rigidBody)
+	if (rigidBody && force != FVector::ZeroVector)
 	{
+		std::cout << force.ToString() << std::endl;
 		rigidBody->ApplyForceToCenter(
 			b2Vec2() << force
 			, true 
@@ -85,6 +86,7 @@ void RigidBody::AddImpulce(const FVector& impulce)
 {
 	if (rigidBody)
 	{
+		std::cout << impulce.ToString() << std::endl;
 		rigidBody->ApplyLinearImpulseToCenter(
 			b2Vec2() << impulce
 			, true
@@ -156,6 +158,40 @@ void RigidBody::SetExtents(FVector newExtents)
 	rigidBody->SetMassData(&massData);
 
 	UpdateState();
+}
+
+FVector RigidBody::GetVelocity() const
+{
+	if (rigidBody)
+	{
+		return FVector() << rigidBody->GetLinearVelocity();
+	}
+	return FVector::ZeroVector;
+}
+
+void RigidBody::SetVelocity(const FVector& newVelocity)
+{
+	if (rigidBody)
+	{
+		rigidBody->SetLinearVelocity(b2Vec2() << newVelocity);
+	}
+}
+
+FVector RigidBody::GetOmega() const
+{
+	if (rigidBody)
+	{
+		return FVector(0, 0, rigidBody->GetAngularVelocity());
+	}
+	return FVector::ZeroVector;
+}
+
+void RigidBody::SetOmega(const FVector& newOmega)
+{
+	if (rigidBody)
+	{
+		rigidBody->SetAngularVelocity(newOmega.Z);
+	}
 }
 
 b2Transform RigidBody::GetTransform() const

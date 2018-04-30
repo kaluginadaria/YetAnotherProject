@@ -24,7 +24,7 @@ public:
 	}
 
 	template<class _T>
-	static _T* CreateActor(std::string& name, World* world, BasePlayerController* controller)
+	static _T* CreateAvatar(std::string& name, World* world, BasePlayerController* controller)
 	{
 		assert(world);
 		auto init = Initialiser::Get();
@@ -41,9 +41,21 @@ public:
 		}
 		return point;
 	}
+	
+	template<class _T>
+		static _T* CreateActor(std::string& name, World* world)
+	{
+		assert(world);
+		auto init = Initialiser::Get();
+		init->type  = EObjectType::eActor;
+		init->name  = &name;
+		init->world	= world;
+
+		return CreateObject<_T>(init);
+	}
 
 	template<class _T>
-	static _T* CreateSubComponent(std::string& name, World* world, Actor* owner)
+	static _T* CreateSubcomponent(std::string& name, World* world, Actor* owner)
 	{
 		assert(world && owner);
 		auto init = Initialiser::Get();
@@ -52,19 +64,20 @@ public:
 		init->world = world;
 		init->owner = owner;
 
-		auto* point = CreateObject<_T>(init);
+		return CreateObject<_T>(init);
+	}
 
-		if (auto root = owner->GetRootComponent()) 
-		{ 
-			point->AttachTo(root);
-		}
-		else
-		{
-			point->AttachTo(world->GetSceneRoot());
-			owner->SetRootComponent(point);
-		}
+	template<class _T>
+	static _T* CreateSubmodule(std::string& name, World* world, Actor* owner)
+	{
+		assert(world && owner);
+		auto init = Initialiser::Get();
+		init->type  = EObjectType::eActorModule;
+		init->name  = &name;
+		init->world = world;
+		init->owner = owner;
 
-		return point;
+		return CreateObject<_T>(init);
 	}
 
 	template<class _T>

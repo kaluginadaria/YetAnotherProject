@@ -40,9 +40,15 @@ public: //~~~~~~~~~~~~~~| Creation functions
 	}
 
 	template<class _T>
-	_T* CreateActor(std::string name,  bool AttachToController = false)
+	_T* CreateActor(std::string name)
 	{
-		return ObjectCreator::CreateActor<_T>(name, world.get(), AttachToController ? playerController : nullptr);
+		return ObjectCreator::CreateActor<_T>(name, world.get());
+	}
+
+	template<class _T>
+	_T* CreateAvatar(std::string name,  bool AttachToController = false)
+	{
+		return ObjectCreator::CreateAvatar<_T>(name, world.get(), AttachToController ? playerController : nullptr);
 	}
 };
 
