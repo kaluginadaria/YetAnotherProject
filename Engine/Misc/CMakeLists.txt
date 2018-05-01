@@ -1,5 +1,0 @@
-DEFINE_UNIT(Misc)
-SET(CODE		"Sources"	)
-SET(TEST    	"Tests" 	)
-SET(CATEGORY	"Engine"	)
-MAKE_MODULE()
