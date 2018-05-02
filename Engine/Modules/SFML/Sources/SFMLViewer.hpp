@@ -2,7 +2,7 @@
 #define SFML_VIEWER_HPP
 
 
-
+#include "Control/EventHandlers.hpp"
 #include "Interfaces/IViewer.hpp"
 #include "Misc.hpp"
 #include <memory>
@@ -22,7 +22,8 @@ public:
 
 protected:
 	Facade* GetRootFacade();
-
+	MouseHandler mouseHandler;
+	KeyboardHandler keyboardHandler;
 	sf::RenderWindow window;
 };
 

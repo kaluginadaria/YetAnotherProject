@@ -45,16 +45,14 @@ MouseHandler::MouseHandler(EventCollector& collector)
 bool MouseHandler::handle(const sf::Event& ega)
 {
 	auto eventType = ega.type;
-	//int button = sf::Event::MouseButtonEvent::button;
+	
 
 	KeyEventType event;
 
 	switch (eventType) {
-	case sf::Event::MouseButtonPressed				:	event.action = BA_Pressed;		break;
+	case sf::Event::MouseButtonPressed:  event.action = BA_Pressed;		break; 
 	case sf::Event::MouseButtonReleased				:	event.action = BA_Released;		break;
-	//case osgGA::GUIEventAdapter::DOUBLECLICK		:	event.action = BA_DoubleClick;	break;
-
-	//case sf::GUIEventAdapter::DRAG				:	SetMousePos(ega);				return false; //TODO:
+	case sf::Event::Closed							:   std::cout << "close button";
 	case sf::Event::MouseMoved						:	SetMousePos(ega);				return false; //TODO:
 	case sf::Event::MouseWheelMoved					:			return false; //TODO:
 	default: return false;
@@ -84,25 +82,29 @@ bool KeyboardHandler::handle(const sf::Event& ega)
 {
 	auto eventType = ega.type;
 	int button = ega.key.code;
-
+	
 	KeyEventType event;
-
 	switch (eventType) {
-	case sf::Keyboard::Key::Down :	event.action = EKeyAction::BA_Pressed;  break;
-	case sf::Keyboard::Key::Up				:	event.action = EKeyAction::BA_Released; break;
+	case sf::Event::KeyPressed		:	event.action = EKeyAction::BA_Pressed;  break;
+	case sf::Event::KeyReleased		:	event.action = EKeyAction::BA_Released; break;
 	default: return false;
 	}
+	
 
 	switch (button) {
+	case sf::Keyboard::Key::Down		:	 break;
+	case sf::Keyboard::Key::Up			:	 break;
 	case sf::Keyboard::Key::Return		:	event.key = KEY_ENTER;		break;
 	case sf::Keyboard::Key::Tab			:	event.key = KEY_TAB;		break;
 	case sf::Keyboard::Key::Escape		:	event.key = KEY_ESCAPE;		break;
-	//case sf::Keyboard::Key::DownKEY_Caps_Lock		:	event.key = KEY_CAPS;		break;
+	
 	default:
-		if (button < 128) //TODO: make valid binding
-		{
-			event.key = (EInputKey)button;
+		switch (button) {
+		case sf::Keyboard::Key::R:button = 114; event.key = (EInputKey)button; break;
+		case sf::Keyboard::Key::F:button = 102;	event.key = (EInputKey)button; break;
 		}
+		
+		
 	}
 	event.rawKey = button;
 

@@ -50,38 +50,3 @@ public:
 
 };
 
-
-/**
- */
-class ResizeHandler
-{
-
-};
-
-/**
-*/
-class CameraSwitchHandler
-{
-
-};
-
-/**
-*/
-class StatsHandler
-{
-
-};
-
-/**
-*/
-class WindowSizeHandler
-{
-
-};
-
-/**
-*/
-class StateSetManipulator
-{
-
-};
