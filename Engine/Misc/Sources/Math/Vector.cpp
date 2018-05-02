@@ -34,22 +34,22 @@ FVector& FVector::operator=(const FVector& r)
 
 float& FVector::operator[](int i)
 {
-	assert(i >= 0 && i < 3);
 	switch (i) {
 	case 0: return X;
 	case 1: return Y;
 	case 2: return Z;
 	}
+	throw std::out_of_range("");
 }
 
 float FVector::operator[](int i) const
 {
-	assert(i >= 0 && i < 3);
 	switch (i) {
 	case 0: return X;
 	case 1: return Y;
 	case 2: return Z;
 	}
+	throw std::out_of_range("");
 }
 
 FVector FVector::operator+(const FVector& r) const
@@ -78,6 +78,9 @@ FVector FVector::operator*(const FVector& r) const
 
 FVector FVector::operator/(const FVector& r) const
 {
+	assert(r.X); // TODO:: log
+	assert(r.Y); // TODO:: log
+	assert(r.Z); // TODO:: log
 	return FVector(
 		X / r.X,
 		Y / r.Y,
@@ -118,6 +121,9 @@ FVector& FVector::operator*=(const FVector& r)
 
 FVector& FVector::operator/=(const FVector& r)
 {
+	assert(r.X); // TODO:: log
+	assert(r.Y); // TODO:: log
+	assert(r.Z); // TODO:: log
 	X /= r.X;
 	Y /= r.Y;
 	Z /= r.Z;
@@ -158,6 +164,7 @@ FVector FVector::operator*(float r)
 
 FVector FVector::operator/(float r)
 {
+	assert(r); // TODO:: log
 	return FVector(
 		X / r,
 		Y / r,
@@ -190,6 +197,7 @@ FVector& FVector::operator*=(float r)
 
 FVector& FVector::operator/=(float r)
 {
+	assert(r); // TODO:: log
 	X /= r;
 	Y /= r;
 	Z /= r;
