@@ -10,7 +10,7 @@
 Viewer::Viewer(PlayerController* controller)
 	: IViewer(controller)
 {
-	window.create(sf::VideoMode(800, 600), "test");
+	window.create(sf::VideoMode(1024, 768), "test");
 }
 
 void Viewer::Render()
@@ -40,16 +40,37 @@ void Viewer::Render()
 void Viewer::DrawShape(FShape shape, FTransform transform, FColor color)
 {
 	assert(shape.type == EShapeType::eBox);
-
+	const float pixinunit = 80;
+	const float spritesize = 510;
+	const float scalefactor = (float)pixinunit/spritesize;
+	std::cout << scalefactor << std::endl;
 	FVector extends = shape.extends;
+	sf::Sprite sprite2;
+	sf::Texture texture2;
+	texture2.loadFromFile("C:/Users/makde/Desktop/YetAnotherProject/box2.png");
+	sprite2.setTexture(texture2);
+	sprite2.setPosition(sf::Vector2f(255, 255));
+	
+	sprite2.setTextureRect(sf::IntRect(0, 0, 5, 5));
+	
+	window.draw(sprite2);
 	sf::Sprite sprite;
 	sf::Texture texture;
 	texture.loadFromFile("C:/Users/makde/Desktop/YetAnotherProject/box.png");
 	sprite.setTexture(texture);
-
-	sprite.setTextureRect(sf::IntRect(0, 0, 740, 740));
-	sprite.setPosition(sf::Vector2f(15, 15));
-	sprite.setRotation(0);
+	
+	sprite.setTextureRect(sf::IntRect(0, 0, spritesize, spritesize));
+	
+	FVector origin = transform(-extends)*pixinunit;
+	
+	
+	origin += FVector(255, 255, 0);
+	sprite.setScale(scalefactor*extends.X*2, scalefactor*extends.Y * 2);
+	sprite.setPosition(sf::Vector2f(origin.X, origin.Y));
+	sprite.rotate(transform.Rotation.GetEulerAngles().Z);
+	
+	
+	
 	window.draw(sprite);
 }
 
