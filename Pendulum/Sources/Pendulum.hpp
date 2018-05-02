@@ -18,16 +18,16 @@ public:
 		: pid(4, 0, 20)
 	{
 		base = CreateSubComponent<BoxColision>("Base");
-		base->SetExtends(FVector(0.6f, 0.6f, 0.6f));
+		base->SetExtents(FVector(0.6f, 0.6f, 0.6f));
 		
 		pendulum = CreateSubComponent<BoxColision>("Pendulum");
 		pendulum->AddComponentLocation(FVector(2, 0, 0), eParent);
-		pendulum->SetExtends(FVector(2, 0.2f, 0.2f));
+		pendulum->SetExtents(FVector(2, 0.2f, 0.2f));
 		
 		target = CreateSubComponent<BoxColision>("Target");
 		target->AddComponentLocation(FVector(5, 0 , 0), eParent);
 		target->AddComponentRotation(FQuat(0 ,90, 0), eParent);
-		target->SetExtends(FVector(0.5f, 0.1f, 0.1f));
+		target->SetExtents(FVector(0.5f, 0.1f, 0.1f));
 
 		cam = CreateSubComponent<CameraComponent>("Camera");
 		cam->AddComponentLocation(FVector(-30, 0, 0), eParent);

@@ -1,21 +1,26 @@
 #ifndef OSG_CONFIG_HPP
 #define OSG_CONFIG_HPP
 
-#include "Configs/FrontendConfig.hpp"
+#include "Injection/IFrontendFabric.hpp"
 #include "OSGConfig.hpp"
 #include "OSGViewer.hpp"
 
 
-struct OSGConfig : public FFrontendConfig
+struct OSGFabric : public IFrontendFabric
 {
-	virtual IFacade* MakeFacade(ActorComponent* owner) 
-	{ 
-		return new Facade(owner); 
+	static UNIQUE(IFrontendFabric) Get()
+	{
+		return std::make_unique<OSGFabric>();
 	}
 
-	virtual IViewer* MakeViewer(PlayerController* controller) 
+	virtual UNIQUE(IFacade) MakeFacade(ActorComponent* owner) 
 	{ 
-		return new Viewer(controller); 
+		return std::make_unique<Facade>(owner); 
+	}
+
+	virtual UNIQUE(IViewer) MakeViewer(PlayerController* controller, SHARED(FEngineConfig) config)
+	{ 
+		return std::make_unique<Viewer>(controller, config); 
 	}
 };
 

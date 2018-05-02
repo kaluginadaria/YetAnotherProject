@@ -101,7 +101,7 @@ std::unordered_set<Thread*> ThreadPool::threads_exclusive = std::unordered_set<T
 std::unordered_map<Thread*, UNIQUE(Thread)> ThreadPool::allThreads;
 
 
-std::atomic<size_t>	ThreadPool::maxThreadCount = 1;	//TODO: rocever the multythreading (if there are more then 1 thread - boom | when you try to take a new task)
+std::atomic<size_t>	ThreadPool::maxThreadCount = 1;
 std::atomic<bool>   ThreadPool::bProcessBacket = false;
 
 

@@ -12,17 +12,17 @@ public:
 
 public:
 
-	FVector GetExtends() const	
+	FVector GetExtents() const	
 	{ 
-		return extends; 
+		return extents; 
 	}
 
-	void SetExtends(FVector newExtends);
+	void SetExtents(FVector newExtents);
 
 protected:
 
 	/// >> 
-	FVector extends;
+	FVector extents;
 	///
 };
 

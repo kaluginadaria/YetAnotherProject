@@ -3,10 +3,17 @@
 
 #include <assert.h>
 #include <string>
+#include "Reflection/Archived.hpp"
 
 
-struct FColor
+struct FColor : public Archived
 {
+	GENERATED_ARCHIVATION_BODY(FColor, Archived)
+		ARCHIVE_MEMBER("", R);
+		ARCHIVE_MEMBER("", G);
+		ARCHIVE_MEMBER("", B);
+		ARCHIVE_MEMBER("", A);
+		ARCHIVATION_END();
 public:
 
 	float R;
@@ -21,8 +28,8 @@ public:
 	
 	FColor& operator=(const FColor& r);
 
-	float& operator[](int i);
-	float  operator[](int i) const;
+	      float& operator[](int i);
+	const float& operator[](int i) const;
 
 public: //~~~~~~~~~~~~~~| color - color
 

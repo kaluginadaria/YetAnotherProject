@@ -13,7 +13,7 @@
 class Viewer : public IViewer
 {
 public:
-	Viewer(PlayerController* controller);
+	Viewer(PlayerController* controller, SHARED(FEngineConfig) config);
 
 public:
 	virtual void Render() override;

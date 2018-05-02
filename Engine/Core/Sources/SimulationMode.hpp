@@ -5,7 +5,8 @@
 #include "Misc.hpp"
 #include "Types.hpp"
 
-#include "Configs/SimulationModeConfig.hpp"
+#include "Configs/EngineConfig.hpp"
+#include "Injection/ISimulationFabric.hpp"
 
 class GameMode;
 class PlayerController;
@@ -20,20 +21,25 @@ class SimulationMode
 {
 public:
 
-	SimulationMode(ISimulationModeConfig* config);
+	SimulationMode(
+		UNIQUE(ISimulationModeFabric) fabric, 
+		SHARED(FEngineConfig)         config
+		);
 	virtual ~SimulationMode();
 
-	static UNIQUE(SimulationMode) Get(ISimulationModeConfig* config);
+	static UNIQUE(SimulationMode) Get(
+		UNIQUE(ISimulationModeFabric) fabric, 
+		SHARED(FEngineConfig)         config
+		);
 
 public: //~~~~~~~~~~~~~~| API for an @Engine
 
 	virtual void OnSimulationBegin();
 	virtual void OnSimulationEnd();
 
-	virtual void DoTick(float deltaTime, ETickType type);
+	virtual void Tick(float deltaTime, ETickType type);
 	
 	virtual void StopSimulation();
-
 	virtual bool TickRequired() const;
 
 public:
@@ -54,7 +60,8 @@ protected:
 	/// <<
 
 	/// >>
-	UNIQUE(ISimulationModeConfig) config;
+	SHARED(FEngineConfig)         config;
+	UNIQUE(ISimulationModeFabric) fabric;
 	UNIQUE(PlayerController) controller;
 	UNIQUE(GameMode) gameMode;
 	/// <<

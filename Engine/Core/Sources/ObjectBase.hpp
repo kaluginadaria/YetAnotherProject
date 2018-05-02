@@ -6,15 +6,17 @@
 #include "Types.hpp"
 
 #include "ObjectCreator.hpp"
+#include "Reflection/Archived.hpp"
 
 class World;
 
 
 
-class ObjectBase
+class ObjectBase : public Archived
 {
-	friend class ObjectCreator;
+	GENERATED_BODY(ObjectBase, Archived);
 
+	friend class ObjectCreator;
 public:
 
 	ObjectBase();
@@ -48,10 +50,6 @@ public: //~~~~~~~~~~~~~~| Access
 	/// type
 
 	EObjectType GetType() const		{ return type; }
-
-public: //~~~~~~~~~~~~~~| Generated body
-
-	virtual std::string __GetClassName() const = 0;
 
 protected: //~~~~~~~~~~~| Object meta
 

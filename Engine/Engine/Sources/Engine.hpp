@@ -1,12 +1,14 @@
 #pragma once
 
 #include <chrono>
+#include <array>
 
-#include "World.hpp"
+#include "Types.hpp"
 #include "SimulationMode.hpp"
+#include "Configs/EngineConfig.hpp"
 
-/**
- * 
+
+/** 
  */
 class Engine
 {
@@ -17,17 +19,16 @@ class Engine
 	using STimes = std::array<STime, ETickType::eMAX>;
 
 public:
-
-	Engine();
+	 Engine();
 	~Engine();
 
-public: //~~~~~~~~~~~~~~| Main cycle
+public: //~~~~~~~~~~~~~~| interface
 
 	int MainCycle();
 
-public: //~~~~~~~~~~~~~~| Mode
-
-	void SetSimulationMode(UNIQUE(SimulationMode) newMode);
+	void SetPathToConfig(const std::string& path);
+	void SetSimulationFabric(UNIQUE(ISimulationModeFabric) fabric);
+	void SaveConfig();
 
 protected:
 
@@ -40,15 +41,15 @@ protected:
 	void UpdateCurrTime();
 
 protected:
-
 	/// >> time
 	Times lastTime;
 	Times currTime;
 	/// << 
-
-
+	
 	/// >> mode
-	UNIQUE(SimulationMode) mode;
+	std::string pathToConfig;
+	SHARED(FEngineConfig) config;
+	UNIQUE(SimulationMode)  mode;
 	/// << 
 
 };

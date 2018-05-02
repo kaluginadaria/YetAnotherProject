@@ -33,7 +33,7 @@ void World::DoTick(float DeltaTime, ETickType type)
 {
 	// TaskBacket backet;
 
-	for (auto tick : tickFunctions[type])
+	for (auto* tick : tickFunctions[type])
 	{
 		if ( IsValid(tick->GetTarget()) ) 
 		{
