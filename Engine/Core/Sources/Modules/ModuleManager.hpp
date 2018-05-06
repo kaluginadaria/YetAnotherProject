@@ -20,6 +20,8 @@ public:
 
 	// unload all modules
 	void UnloadModules();
+	
+	void SetConfig(SHARED(FEngineConfig)& newConfig);
 
 public:
 	template<class _M> 
@@ -38,8 +40,9 @@ public:
 	template<class _M>
 		_M& CreateModule()
 		{	// create a module
-		auto ptr = std::make_unique<_M>();
+		auto ptr = std::make_unique<_M>(config);
 		auto raw = ptr.get();
+
 		modules.emplace_back(std::move(ptr));
 		raw->OnLoaded();
 		return *raw;
@@ -69,6 +72,8 @@ private:
 	ModuleManager() = default;
 
 	std::deque<UNIQUE(IModule)> modules;
+	SHARED(FEngineConfig)       config;
+
 
 	static ModuleManager moduleManager;
 };

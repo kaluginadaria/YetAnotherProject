@@ -20,3 +20,8 @@ void ModuleManager::UnloadModules()
 	});
 	modules.clear();
 }
+
+void ModuleManager::SetConfig(SHARED(FEngineConfig)& newConfig)
+{
+	config = newConfig;
+}

@@ -9,7 +9,7 @@
 struct FVector2 : public Archived
 {
 	GENERATED_ARCHIVATION_BODY(FVector2, Archived);
-		ARCHIVE_MEMBER("test", X);
+		ARCHIVE_MEMBER("", X);
 		ARCHIVE_MEMBER("", Y);
 		ARCHIVATION_END()
 public:

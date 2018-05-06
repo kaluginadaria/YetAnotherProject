@@ -7,7 +7,6 @@
 #include <unordered_set>
 
 #include "ObjectBase.hpp"
-#include "Interfaces/IPhysicsScene.hpp"
 #include "Threading/Initialiser.hpp"
 
 
@@ -91,7 +90,7 @@ protected:
 	/// << 
 
 	/// >> scene
-	ActorComponent*   sceneRoot;
+	ActorComponent* sceneRoot;
 	/// <<
 
 	/// >> indices

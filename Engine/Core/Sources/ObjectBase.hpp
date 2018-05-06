@@ -8,12 +8,12 @@
 class World;
 
 
+
 class ObjectBase : public Archived
 {
 	GENERATED_BODY(ObjectBase, Archived);
 
 	friend class ObjectCreator;
-
 public:
 	ObjectBase();
 	virtual ~ObjectBase();

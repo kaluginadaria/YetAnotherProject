@@ -2,7 +2,7 @@
 
 #include "World.hpp"
 #include "ActorComponent.hpp"
-#include "ComponentVisualisers.hpp"
+#include "ComponentVisualisersModule.hpp"
 
 #include <iostream>
 

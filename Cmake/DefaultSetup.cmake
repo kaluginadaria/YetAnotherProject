@@ -6,7 +6,7 @@ macro(SetupEvniroment)
 set (CMAKE_CXX_STANDARD 14)
 
 if(MSVC)
-	#Use static libs
+	#Use dynamic libs
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}	/MD ")
 	set(CMAKE_CXX_FLAGS_DEBUG	"${CMAKE_CXX_FLAGS_DEBUG}   /MDd")
 	
