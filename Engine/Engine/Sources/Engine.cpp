@@ -1,6 +1,6 @@
 #include "Engine.hpp"
 #include "Modules/ModuleManager.hpp"
-#include "ComponentVisualisers.hpp"
+#include "ComponentVisualisersModule.hpp"
 #include "Reflection/Archiver.hpp"
 
 #include <iostream>
@@ -17,6 +17,7 @@ Engine::Engine()
 {
 	// load engine modules
 	auto& manager = ModuleManager::Get();
+	manager.SetConfig(config);
 	manager.LoadModule<ComponentVisualisersModule>();
 }
 

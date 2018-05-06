@@ -1,4 +1,4 @@
-#include "ComponentVisualisers.hpp"
+#include "ComponentVisualisersModule.hpp"
 #include "ActorComponent.hpp"
 #include "ComponentVisualiser.hpp"
 
@@ -8,9 +8,12 @@
 
 ComponentVisualisersModule& ComponentVisualisersModule::Get()
 {
-	auto& manager = ModuleManager::Get();
-	return manager.GetModule<ComponentVisualisersModule>();
+	return ModuleManager::Get().GetModule<ComponentVisualisersModule>();
 }
+
+ComponentVisualisersModule::ComponentVisualisersModule(SHARED(FEngineConfig)& config)
+	: IModule(config)
+{}
 
 void ComponentVisualisersModule::OnLoaded()
 {

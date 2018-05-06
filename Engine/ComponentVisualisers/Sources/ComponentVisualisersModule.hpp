@@ -20,9 +20,9 @@ class ComponentVisualisersModule : public IModule
 public:
 	static ComponentVisualisersModule& Get();
 
+	ComponentVisualisersModule(SHARED(FEngineConfig)& config);
 	virtual void OnLoaded() override;
 	virtual void OnUnload() override;
-
 
 public:
 	// request a visualisation for the component

@@ -11,7 +11,7 @@
 #include "Control/EventHandlers.hpp"
 #include "Camera/CameraManipulator.hpp"
 
-#include "ComponentVisualisers.hpp"
+#include "ComponentVisualisersModule.hpp"
 
 
 
