@@ -22,8 +22,10 @@ public:
 
 public: //~~~~~~~~~~~~~~| Physics -> to root component
 
-	void AddForce (const FVector& force, ESpaceType space);
-	void AddTorque(const FVector& torue, ESpaceType space);
+	void AddForce          (const FVector& force,   ESpaceType space);
+	void AddTorque         (const FVector& torque,  ESpaceType space);
+	void AddImpulce        (const FVector& impulce, ESpaceType space);
+	void AddKineticMomement(const FVector& moment,  ESpaceType space);
 
 public: //~~~~~~~~~~~~~~| Kinematic -> to root component
 
@@ -56,14 +58,15 @@ public: //~~~~~~~~~~~~~~| Kinematic -> to root component
 
 public: //~~~~~~~~~~~~~~| chain and modules
 
+	void AttachTo(Actor* newParent);
+	void Detach();
+
 	const ActorComponent* GetRootComponent() const { return rootComponent; }
 	      ActorComponent* GetRootComponent()       { return rootComponent; }
 	void SetRootComponent(ActorComponent* newRoot);
 
 	      std::vector<ActorModule*>& GetModules()       { return modules; }
 	const std::vector<ActorModule*>& GetModules() const { return modules; }
-
-	// TODO:: GetComponents<T> - over modules and components
 
 protected:
 
@@ -75,8 +78,32 @@ protected:
 public: //~~~~~~~~~~~~~~| Creation functions
 
 	template<class _T>
-	_T* CreateSubComponent(std::string name)
+	_T* CreateSubcomponent(std::string name)
 	{
-		return ObjectCreator::CreateSubComponent<_T>(name, world, this);
+		if (auto* point = ObjectCreator::CreateSubcomponent<_T>(name, world, this))
+		{
+			if (rootComponent)
+			{ 
+				point->AttachTo(rootComponent);
+			}
+			else
+			{
+				point->AttachTo(world->GetSceneRoot());
+				rootComponent = point;
+			}
+			return point;
+		}
+		return nullptr;
+	}
+
+	template<class _T>
+	_T* CreateSubModule(std::string name)
+	{
+		if (auto* point = ObjectCreator::CreateSubmodule<_T>(name, world, this))
+		{
+			modules.emplace_back(point);
+			return point;
+		}
+		return nullptr;
 	}
 };

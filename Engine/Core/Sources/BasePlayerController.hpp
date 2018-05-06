@@ -1,16 +1,17 @@
 #ifndef BASE_PLAYER_CONTROLLER_HPP
 #define BASE_PLAYER_CONTROLLER_HPP
+#pragma once
 
-#include "Misc.hpp"
-#include "Types.hpp"
+#include "Common.hpp"
 
 class World;
 class Avatar;
 class GameMode;
 
 
-class BasePlayerController
+class BasePlayerController : public Archived
 {
+	GENERATED_BODY(BasePlayerController, Archived);
 public:
 
 	BasePlayerController();
@@ -38,7 +39,6 @@ public:
 	void SetGameMode(GameMode* newMode) { gameMode = newMode;   }
 
 protected:
-
 	/// << 
 	Avatar*   target;
 	World*    world;

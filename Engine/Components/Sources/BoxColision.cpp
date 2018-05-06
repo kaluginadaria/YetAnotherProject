@@ -2,10 +2,10 @@
 
 
 BoxColision::BoxColision()
-	: extends(1, 1, 1)
+	: extents(1, 1, 1)
 {}
 
-void BoxColision::SetExtends(FVector newExtends)
+void BoxColision::SetExtents(FVector newExtents)
 {
-	extends = newExtends;
+	extents = newExtents;
 }

@@ -1,6 +1,6 @@
+#pragma once
 #ifndef IFACADE_HPP
 #define IFACADE_HPP
-#include "Types.hpp"
 
 class ActorComponent;
 
@@ -8,9 +8,8 @@ class IFacade
 {
 public:
 
-	IFacade(ActorComponent* owner, FShape shape)
+	IFacade(ActorComponent* owner)
 		: owner(owner)
-		, shape(shape)
 	{}
 	virtual ~IFacade() = default;
 
@@ -22,7 +21,7 @@ public:
 	virtual void Update() = 0;
 
 protected:
-	FShape shape;
+	
 	ActorComponent* owner;
 };
 

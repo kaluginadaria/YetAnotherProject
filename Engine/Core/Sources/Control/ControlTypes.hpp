@@ -1,5 +1,6 @@
 #ifndef CONTROL_TYPES_HPP
 #define CONTROL_TYPES_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -111,7 +112,7 @@ public:
 		return key != EInputKey::KEY_NONE;
 	}
 
-	ControlKey getKey() const //TODO: rename
+	ControlKey getKey() const
 	{
 		auto tmp = *this;
 
@@ -126,9 +127,9 @@ struct std::hash<ControlKey>
 {
 	size_t operator()(const ControlKey& key) const
 	{
-		return ((size_t)key.key		<< 0 ) // [0, 65536) 
-			|  ((size_t)key.modifier<< 16) // [0, 256  ) 
-			|  ((size_t)key.action	<< 24);// [0, 256  ) 
+		return ((size_t)key.key      << 0 )
+		    |  ((size_t)key.modifier << 16)
+		    |  ((size_t)key.action   << 24);
 	}
 };
 
@@ -236,7 +237,7 @@ public:
 
 /** Event from a keyboard 
 */
-struct KeyEvent
+struct KeyEventType
 {
 	int			 rawKey		= 0;
 	EInputKey	 key		= EInputKey::KEY_NONE;
@@ -245,7 +246,7 @@ struct KeyEvent
 
 public:
 
-	bool operator==(const KeyEvent& r) const
+	bool operator==(const KeyEventType& r) const
 	{
 		return rawKey	== r.rawKey
 			&& key		== r.key

@@ -1,22 +1,20 @@
 #pragma once
 
 #include <string>
-
-#include "Misc.hpp"
-#include "Types.hpp"
-
+#include "Common.hpp"
 #include "ObjectCreator.hpp"
+#include "Reflection/Archived.hpp"
 
 class World;
 
 
-
-class ObjectBase
+class ObjectBase : public Archived
 {
+	GENERATED_BODY(ObjectBase, Archived);
+
 	friend class ObjectCreator;
 
 public:
-
 	ObjectBase();
 	virtual ~ObjectBase();
 
@@ -49,10 +47,6 @@ public: //~~~~~~~~~~~~~~| Access
 
 	EObjectType GetType() const		{ return type; }
 
-public: //~~~~~~~~~~~~~~| Generated body
-
-	virtual std::string __GetClassName() const = 0;
-
 protected: //~~~~~~~~~~~| Object meta
 
 	/// >> common
@@ -71,8 +65,14 @@ public: //~~~~~~~~~~~~~~| Creation functions
 	}
 
 	template<class _T>
-	_T* CreateActor(std::string name,  bool AttachToController = false)
+	_T* CreateActor(std::string name)
 	{
-		return ObjectCreator::CreateActor<_T>(name, world, AttachToController ? playerController : nullptr);
+		return ObjectCreator::CreateActor<_T>(name, world.get());
+	}
+
+	template<class _T>
+	_T* CreateAvatar(std::string name,  bool AttachToController = false)
+	{
+		return ObjectCreator::CreateAvatar<_T>(name, world.get(), AttachToController ? playerController : nullptr);
 	}
 };

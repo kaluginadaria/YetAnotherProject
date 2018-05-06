@@ -1,13 +1,18 @@
+#pragma once
 #ifndef TRANSFORM_HPP
 #define TRANSFORM_HPP
+#pragma once
 
 #include "Quat.hpp"
 #include "Vector.hpp"
 
 
-
-class FTransform
+class FTransform : public Archived
 {
+	GENERATED_ARCHIVATION_BODY(FTransform, Archived);
+		ARCHIVE_MEMBER("", Location);
+		ARCHIVE_MEMBER("", Rotation);
+		ARCHIVATION_END()
 public:
 
 	FVector Location; // positions of a center

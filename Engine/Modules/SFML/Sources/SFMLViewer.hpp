@@ -2,8 +2,8 @@
 #define SFML_VIEWER_HPP
 
 
-
-#include "Interfaces/IViewer.hpp"
+#include "Control/EventHandlers.hpp"
+#include "Interfaces/Default/Viewer.hpp"
 #include "Misc.hpp"
 #include <memory>
 #include "SFML/Graphics.hpp"
@@ -11,10 +11,12 @@
 #include "SFML/Window.hpp"
 #include "SFMLFacade.hpp"
 
-class Viewer : public IViewer
+
+
+class Viewer : public FViewer
 {
 public:
-	Viewer(PlayerController* controller);
+	Viewer(PlayerController* controller, SHARED(FEngineConfig) config);
 
 public:
 	virtual void Render() override;
@@ -22,7 +24,8 @@ public:
 
 protected:
 	Facade* GetRootFacade();
-
+	MouseHandler mouseHandler;
+	KeyboardHandler keyboardHandler;
 	sf::RenderWindow window;
 };
 

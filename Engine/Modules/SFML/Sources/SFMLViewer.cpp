@@ -7,8 +7,10 @@
 #include <iostream>
 
 
-Viewer::Viewer(PlayerController* controller)
-	: IViewer(controller)
+Viewer::Viewer(PlayerController* controller, SHARED(FEngineConfig) config)
+	: FViewer(controller, config),
+	keyboardHandler(*GetEventCollector()),
+	mouseHandler(*GetEventCollector())
 {
 	window.create(sf::VideoMode(1024, 768), "test");
 }
@@ -18,16 +20,18 @@ void Viewer::Render()
 	window.clear();
 
 	sf::Event event;
-	while(window.pollEvent(event)) // the sheet doesn't works without the stuff
+	while(window.pollEvent(event))
 	{
-		if(event.type == sf::Event::Closed)
-			window.close();
+		keyboardHandler.handle(event);
+		mouseHandler.handle(event);
 	}
+	auto& visualisersModule = ComponentVisualisersModule::Get();
+
 
 	World& world = *GetWorld();
 	for (auto& component : world)
 	{
-		ComponentVisualisers::Visualise(&component, this);
+		visualisersModule.Visualise(&component, this);
 		auto* tmp = dynamic_cast<Facade*>(component.GetFacade());
 		if (tmp)
 		{
@@ -40,36 +44,26 @@ void Viewer::Render()
 void Viewer::DrawShape(FShape shape, FTransform transform, FColor color)
 {
 	assert(shape.type == EShapeType::eBox);
-	const float pixinunit = 80;
-	const float spritesize = 510;
+	const int   pixinunit   = 80;
+	const int   spritesize  = 510;
 	const float scalefactor = (float)pixinunit/spritesize;
-	std::cout << scalefactor << std::endl;
-	FVector extends = shape.extends;
-	sf::Sprite sprite2;
-	sf::Texture texture2;
-	texture2.loadFromFile("C:/Users/makde/Desktop/YetAnotherProject/box2.png");
-	sprite2.setTexture(texture2);
-	sprite2.setPosition(sf::Vector2f(255, 255));
+//	std::cout << scalefactor << std::endl;
 	
-	sprite2.setTextureRect(sf::IntRect(0, 0, 5, 5));
+	FVector extents = shape.extents;
 	
-	window.draw(sprite2);
 	sf::Sprite sprite;
 	sf::Texture texture;
-	texture.loadFromFile("C:/Users/makde/Desktop/YetAnotherProject/box.png");
+	texture.loadFromFile("../../box.png"); //TODO:: resource system
 	sprite.setTexture(texture);
 	
 	sprite.setTextureRect(sf::IntRect(0, 0, spritesize, spritesize));
 	
-	FVector origin = transform(-extends)*pixinunit;
-	
-	
-	origin += FVector(255, 255, 0);
-	sprite.setScale(scalefactor*extends.X*2, scalefactor*extends.Y * 2);
+	FVector scale  = extents * scalefactor * 2;
+	FVector origin = transform(-extents) * pixinunit + FVector(255, 255, 0);
+
+	sprite.setScale(scale.X, scale.Y);
 	sprite.setPosition(sf::Vector2f(origin.X, origin.Y));
 	sprite.rotate(transform.Rotation.GetEulerAngles().Z);
-	
-	
 	
 	window.draw(sprite);
 }

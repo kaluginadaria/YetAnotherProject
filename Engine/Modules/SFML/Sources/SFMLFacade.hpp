@@ -22,7 +22,7 @@ public:
 
 	virtual bool AttachTo(IFacade* parent) override;
 	virtual bool Detach() override;
-	virtual void Update() override;
+	virtual void Update();
 public:
 	sf::Sprite sprite;
 };
