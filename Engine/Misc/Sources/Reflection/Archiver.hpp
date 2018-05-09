@@ -11,6 +11,7 @@
 #include <memory>
 #include "Misc.hpp"
 
+
 class Archiver
 {
 public:
@@ -62,9 +63,6 @@ private:
 
 	std::vector<std::string> GetTokens(const std::string& name);
 };
-
-
-
 
 
 #endif // !ARCIVER_HPP
